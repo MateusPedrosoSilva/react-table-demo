@@ -5,6 +5,7 @@ export const COLUMNS = [
     Header: 'id',
     Footer: 'id',
     accessor: 'id',
+    disableFilters: true
   },
   {
     Header: 'First name',
@@ -20,7 +21,7 @@ export const COLUMNS = [
     Header: 'Date of birth',
     Footer: 'Date of birth',
     accessor: 'date_of_birth',
-    Cell: ({ value }) => { return format(new Date(value), 'dd/MM/yyy') }
+    Cell: ({ value }) => { return format(new Date(value), 'dd/MM/yyy') },
   },
   {
     Header: 'Country',
@@ -54,7 +55,7 @@ export const GROUPED_COLUMNS = [
         Footer: 'Last name',
         accessor: 'last_name',
       },
-    ]
+    ],
   },
   {
     Header: 'Info',
@@ -75,6 +76,6 @@ export const GROUPED_COLUMNS = [
         Footer: 'Phone',
         accessor: 'phone',
       },
-    ]
+    ],
   },
 ];
