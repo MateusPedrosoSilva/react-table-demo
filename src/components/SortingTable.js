@@ -2,13 +2,11 @@ import React, { useMemo } from 'react';
 import { useTable, useSortBy } from "react-table";
 import MOCK_DATA from './MOCK_DATA.json';
 import { COLUMNS } from './columns';
-// import { GROUPED_COLUMNS } from './columns';
 import './table.css';
 
 export const SortingTable = () => {
 
   const columns = useMemo(() => COLUMNS, []);
-  // const columns = useMemo(() => GROUPED_COLUMNS, []);
   const data = useMemo(() => MOCK_DATA, []);
 
   const {
@@ -19,9 +17,6 @@ export const SortingTable = () => {
     rows,
     prepareRow,
   } = useTable({
-    // columns: columns,
-    // data: data,
-    // \/ Because of es6 sintax.
     columns,
     data,
   },
