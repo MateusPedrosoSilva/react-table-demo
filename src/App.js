@@ -1,5 +1,6 @@
 import './App.css';
-import { RowSelection } from './components/RowselectionTable';
+import { Roterizador } from './components/Roterizador';
+// import { RowSelection } from './components/RowselectionTable';
 // import { FilteringTable } from './components/FilteringTable';
 // import { PaginationTable } from './components/PaginationTable';
 // import { BasicTable } from './components/BasicTable';
@@ -11,7 +12,7 @@ function App() {
     //   <RowSelection />
     // </div>
     <div>
-      <RowSelection />
+      <Roterizador />
     </div>
   );
 }

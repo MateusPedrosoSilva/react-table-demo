@@ -6,7 +6,7 @@ import { COLUMNS } from './columns';
 import './table.css';
 import { Checkbox } from './Checkbox';
 
-export const RowSelection = () => {
+export const Roterizador = () => {
   const columns = useMemo(() => COLUMNS, []);
   // const data = useMemo(() => MOCK_DATA, []);
   const data = useMemo(() => MOCK_API, []);
@@ -17,6 +17,7 @@ export const RowSelection = () => {
     headerGroups,
     footerGroups,
     rows,
+    state,
     prepareRow,
     selectedFlatRows,
   } = useTable({
@@ -43,6 +44,7 @@ export const RowSelection = () => {
     });
 
   const firstPageRows = rows.slice(0, 200);
+  const { pageIndex, pageSize } = state;
 
   return (
     <>
