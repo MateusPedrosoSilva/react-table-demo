@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useTable, useRowSelect, usePagination } from "react-table";
+import { useTable, useRowSelect } from "react-table";
 // import MOCK_DATA from './MOCK_DATA.json';
 import MOCK_API from './MOCK_API.json';
 import { COLUMNS } from './columns';
@@ -23,7 +23,6 @@ export const RowSelection = () => {
     columns,
     data,
   },
-    usePagination,
     useRowSelect,
     (hooks) => {
       hooks.visibleColumns.push((columns) => {
@@ -42,7 +41,7 @@ export const RowSelection = () => {
       });
     });
 
-  const firstPageRows = rows.slice(0, 200);
+  const firstPageRows = rows.slice(0, 100);
 
   return (
     <>
