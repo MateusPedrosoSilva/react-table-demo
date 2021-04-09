@@ -8,12 +8,14 @@ import './table.css';
 import { Checkbox } from './Checkbox';
 
 export const Roterizador = () => {
+  const [dataInicial, seDataInicial] = useState(1210301);
+  const [dataFinal, seDataFinal] = useState(1210406);
 
   const columns = useMemo(() => COLUMNS, []);
   // const data = useMemo(() => MOCK_DATA, []);
   // const data = useMemo(() => MOCK_API, []);
 
-  var data = axios.get('http://10.15.2.48:7777/listarPedidos?data_inicial=1210301&data_final=1210406').then(res => { data = res.message });
+  var data = axios.get(`http://10.15.2.48:7777/listarPedidos?data_inicial=${dataInicial}&data_final=${dataFinal}`).then(res.message);
 
   const {
     getTableProps,
