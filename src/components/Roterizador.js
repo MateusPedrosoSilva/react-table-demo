@@ -135,7 +135,8 @@ export const Roterizador = () => {
       <pre>
         <code>
           {JSON.stringify({
-            selectedFlatRows: selectedFlatRows.map((row) => row.original),
+            //selectedFlatRows: selectedFlatRows.map((row) => row.original),
+            atividades: selectedFlatRows.map((row) => row.original),
           },
             null,
             2
