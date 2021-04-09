@@ -1,16 +1,19 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTable, useRowSelect, usePagination } from "react-table";
 // import MOCK_DATA from './MOCK_DATA.json';
-import MOCK_API from './MOCK_API.json';
-// import axios from 'axios';
+// import MOCK_API from './MOCK_API.json';
+import axios from 'axios';
 import { COLUMNS } from './columns';
 import './table.css';
 import { Checkbox } from './Checkbox';
 
 export const Roterizador = () => {
+
   const columns = useMemo(() => COLUMNS, []);
   // const data = useMemo(() => MOCK_DATA, []);
-  const data = useMemo(() => MOCK_API, []);
+  // const data = useMemo(() => MOCK_API, []);
+
+  axios.get('http://10.15.2.48:7777/listarPedidos?data_inicial=1210301&data_final=1210406').then(res => { const data = res.message });
 
   const {
     getTableProps,
