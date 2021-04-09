@@ -13,7 +13,7 @@ export const Roterizador = () => {
   // const data = useMemo(() => MOCK_DATA, []);
   // const data = useMemo(() => MOCK_API, []);
 
-  axios.get('http://10.15.2.48:7777/listarPedidos?data_inicial=1210301&data_final=1210406').then(res => { const data = res.message });
+  var data = axios.get('http://10.15.2.48:7777/listarPedidos?data_inicial=1210301&data_final=1210406').then(res => { data = res.message });
 
   const {
     getTableProps,
