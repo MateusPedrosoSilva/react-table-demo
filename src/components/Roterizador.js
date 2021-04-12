@@ -6,24 +6,24 @@ import './table.css';
 import { Checkbox } from './Checkbox';
 
 export const Roterizador = () => {
-  const [dataInicial, seDataInicial] = useState(1210301);
+  const [data, setData] = useState([]);
+  const [loadingData, setLoadingData] = useState(true);
+  const [dataInicial, seDataInicial] = useState(1210401);
   const [dataFinal, seDataFinal] = useState(1210406);
 
   const columns = useMemo(() => COLUMNS, []);
 
-  const [data, setData] = useState([]);
-  const [loadingData, setLoadingData] = useState(true);
-
       useEffect(() => {
         async function getData(){
           await axios
-            .get(`http://10.15.2.48:7777/listarPedidos?data_inicial=1210301&data_final=1210330`)
+            .get(`http://10.15.2.48:7777/listarPedidos?data_inicial=${dataInicial}&data_final=${dataFinal}`)
             .then((res) => {
               console.log(res.data.message);
               setData(res.data.message);
               setLoadingData(false);
             });
-        }
+        };
+
         if(loadingData){
           getData();
         }
@@ -59,9 +59,9 @@ export const Roterizador = () => {
         return [
           {
             id: 'selection',
-            Header: ({ getToggleAllRowsSelectedProps }) => (
-              <Checkbox {...getToggleAllRowsSelectedProps()} />
-            ),
+            // Header: ({ getToggleAllRowsSelectedProps }) => (
+            //   <Checkbox {...getToggleAllRowsSelectedProps()} />
+            // ),
             Cell: ({ row }) => (
               <Checkbox {...row.getToggleRowSelectedProps()} />
             )
@@ -76,7 +76,8 @@ export const Roterizador = () => {
 
   return (
     <>
-      <table {...getTableProps()}>
+      {
+        loadingData ? (<p>Carregando as informações...</p>):(<table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -119,17 +120,18 @@ export const Roterizador = () => {
             )
           )}
         </tfoot>
-      </table>
+      </table>)
+      }
       <div>
         <span>
-          Page{' '}
+          Página{' '}
           <strong>
-            {pageIndex + 1} of {pageOptions.length}
+            {pageIndex + 1} de {pageOptions.length}
           </strong>
           {' '}
         </span>
         <span>
-          | Go to page: {' '}
+          | Ir para página: {' '}
           <input type='number' defaultValue={pageIndex + 1} onChange={(e) => {
             const pageNumber = e.target.value ? Number(e.target.value) - 1 : 0;
             gotoPage(pageNumber);
@@ -139,14 +141,14 @@ export const Roterizador = () => {
           {
             [10, 25, 50].map((pageSize) => (
               <option key={pageSize} value={pageSize}>
-                Show {pageSize}
+                Mostrar {pageSize}
               </option>
             ))
           }
         </select>
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}> {'<<'} </button>
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}> Previous </button>
-        <button onClick={() => nextPage()} disabled={!canNextPage}> Next </button>
+        <button onClick={() => previousPage()} disabled={!canPreviousPage}> Anterior </button>
+        <button onClick={() => nextPage()} disabled={!canNextPage}> Próxima </button>
         <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}> {'>>'} </button>
       </div>
       <pre>
