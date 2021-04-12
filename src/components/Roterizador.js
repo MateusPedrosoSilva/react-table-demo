@@ -11,9 +11,6 @@ export const Roterizador = () => {
 
   const columns = useMemo(() => COLUMNS, []);
 
-<<<<<<< HEAD
-  var data = axios.get(`http://10.15.2.48:7777/listarPedidos?data_inicial=${dataInicial}&data_final=${dataFinal}`).then(res.message);
-=======
   const [data, setData] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
 
@@ -31,8 +28,6 @@ export const Roterizador = () => {
           getData();
         }
       });
-
->>>>>>> 7a3801364b89e1a7faa44883361e76c0ffa6e26a
 
   const {
     getTableProps,
