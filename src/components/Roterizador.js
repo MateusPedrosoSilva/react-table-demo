@@ -8,8 +8,11 @@ import { Checkbox } from './Checkbox';
 export const Roterizador = () => {
   const [data, setData] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
-  const [dataInicial, seDataInicial] = useState(1210401);
-  const [dataFinal, seDataFinal] = useState(1210406);
+  const [dataInicial, setDataInicial] = useState(1210401);
+  const [dataFinal, setDataFinal] = useState(1210406);
+  // const [sendData, setSendData] = useState({});
+
+  var sendData;
 
   const columns = useMemo(() => COLUMNS, []);
 
@@ -146,21 +149,30 @@ export const Roterizador = () => {
             ))
           }
         </select>
+      </div>
+      <div>
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}> {'<<'} </button>
         <button onClick={() => previousPage()} disabled={!canPreviousPage}> Anterior </button>
         <button onClick={() => nextPage()} disabled={!canNextPage}> Próxima </button>
         <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}> {'>>'} </button>
       </div>
+      <div>
+        <button onClick={ async () => await axios.post('http://10.15.2.48:7777/enviarPedidos', JSON.parse(sendData), {
+          headers: {
+            'Content-Type': 'application/json'
+          }})
+        }> Enviar para Senior </button>
+      </div>
       <pre>
         <code>
-          {JSON.stringify({
+          {sendData = JSON.stringify({
             //selectedFlatRows: selectedFlatRows.map((row) => row.original),
             atividades: selectedFlatRows.map((row) => row.original),
-            // test de comantario 
           },
             null,
             2
-          )}
+          )
+          }
         </code>
       </pre>
     </>
