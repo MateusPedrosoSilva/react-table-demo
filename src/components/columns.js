@@ -37,8 +37,8 @@ export const COLUMNS = [
     accessor: 'DATA_PREVISAO_ATENDIMENTO',
   },
   {
-    Header: 'Sequência',
-    Footer: 'Sequência',
+    Header: 'Pedido',
+    Footer: 'Pedido',
     accessor: 'SEQUENCIA',
   },
   {
@@ -49,7 +49,7 @@ export const COLUMNS = [
   {
     Header: 'Cód. destino CPF',
     Footer: 'Cód. destino CPF',
-    accessor: 'COD_DESTINO_CPF',
+    accessor: 'in',
   },
   {
     Header: 'Cód. embarcador',
@@ -87,8 +87,8 @@ export const COLUMNS = [
     accessor: 'CHAVE_ACESSO',
   },
   {
-    Header: 'Cód. postal',
-    Footer: 'Cód. postal',
+    Header: 'CEP',
+    Footer: 'CEP',
     accessor: 'CODIGO_POSTAL',
   },
   {

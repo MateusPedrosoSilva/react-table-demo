@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import ReactDOM from 'react-dom';
 import { useTable, useRowSelect, usePagination } from "react-table";
 import axios from 'axios';
 import { COLUMNS } from './columns';
@@ -6,10 +7,14 @@ import './table.css';
 import { Checkbox } from './Checkbox';
 
 export const Roterizador = () => {
+  //TODO: Manage the date, initial date
+
+
   const [data, setData] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
+  const [shown, setShown] = useState(false);
   const [dataInicial, setDataInicial] = useState(1210401);
-  const [dataFinal, setDataFinal] = useState(1210406);
+  const [dataFinal, setDataFinal] = useState(1210414);
   // const [sendData, setSendData] = useState({});
 
   var sendData;
@@ -53,7 +58,26 @@ export const Roterizador = () => {
   } = useTable({
     columns,
     data,
-    initialState: { pageIndex: 0 }
+    initialState: { 
+      pageIndex: 0,
+      hiddenColumns: [
+        'SEGUNDA_PLACA',
+        'RETORNA_ORIGEM',
+        'COD_EMBARCADOR',
+        'COLETA_ENTREGA_SERVICO',
+        'PAIS',
+        'LATITUDE',
+        'LONGITUDE',
+        'COD_OPERACAO',
+        'COD_TIPO_CARGA',
+        'PRIORIDADE',
+        'PRAZO_ENTREGA',
+        'DATA_AGENDAMENTO',
+        'PRAZO_ENTREGA',
+        'HORARIO_INICIO_JANELA',
+        'TEMPO_ATENDIMENTO',
+      ]
+    }
   },
     usePagination,
     useRowSelect,
@@ -64,6 +88,9 @@ export const Roterizador = () => {
             id: 'selection',
             // Header: ({ getToggleAllRowsSelectedProps }) => (
             //   <Checkbox {...getToggleAllRowsSelectedProps()} />
+            // ),
+            // Header: ({ getToggleAllPageRowsSelectedProps }) => (
+            //   <Checkbox {...getToggleAllPageRowsSelectedProps()} />
             // ),
             Cell: ({ row }) => (
               <Checkbox {...row.getToggleRowSelectedProps()} />
@@ -76,6 +103,27 @@ export const Roterizador = () => {
 
   // const firstPageRows = rows.slice(0, 200);
   const { pageIndex, pageSize } = state;
+
+  const modalBody = () => (
+    // Build the modal body
+    <div>
+      <p>Teste de pagina de resumo</p>
+      <pre>
+        <code>
+          {sendData = JSON.stringify({
+            //selectedFlatRows: selectedFlatRows.map((row) => row.original),
+            atividades: selectedFlatRows.map((row) => row.original),
+          },
+            null,
+            2
+          )
+          }
+        </code>
+      </pre>
+      <button onClick={() => setShown(false)}>Fechar</button>
+    </div>
+  );
+
 
   return (
     <>
@@ -162,19 +210,10 @@ export const Roterizador = () => {
             'Content-Type': 'application/json'
           }})
         }> Enviar para Senior </button>
+        <button onClick={() => setShown(true)}>Prever envio</button>
+        {shown && ReactDOM.createPortal(modalBody(), document.body)}
       </div>
-      <pre>
-        <code>
-          {sendData = JSON.stringify({
-            //selectedFlatRows: selectedFlatRows.map((row) => row.original),
-            atividades: selectedFlatRows.map((row) => row.original),
-          },
-            null,
-            2
-          )
-          }
-        </code>
-      </pre>
+      
     </>
   )
 }
