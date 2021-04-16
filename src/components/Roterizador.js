@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { useTable, useRowSelect, usePagination } from "react-table";
+import { useTable, useRowSelect, usePagination, useSortBy } from "react-table";
 import axios from 'axios';
 import { COLUMNS } from './columns';
 import './table.css';
@@ -9,33 +9,32 @@ import { Checkbox } from './Checkbox';
 export const Roterizador = () => {
   //TODO: Manage the date, initial date
 
-
   const [data, setData] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
   const [shown, setShown] = useState(false);
-  const [dataInicial, setDataInicial] = useState(1210401);
-  const [dataFinal, setDataFinal] = useState(1210414);
+  const [dataInicial, setDataInicial] = useState(1210413);
+  const [dataFinal, setDataFinal] = useState(1210416);
   // const [sendData, setSendData] = useState({});
 
   var sendData;
 
   const columns = useMemo(() => COLUMNS, []);
 
-      useEffect(() => {
-        async function getData(){
-          await axios
-            .get(`http://10.15.2.48:7777/listarPedidos?data_inicial=${dataInicial}&data_final=${dataFinal}`)
-            .then((res) => {
-              console.log(res.data.message);
-              setData(res.data.message);
-              setLoadingData(false);
-            });
-        };
-
-        if(loadingData){
-          getData();
-        }
-      });
+  useEffect(() => {
+    async function getData(){
+      await axios
+        .get(`http://10.15.2.48:7777/listarPedidos?data_inicial=${dataInicial}&data_final=${dataFinal}`)
+        .then((res) => {
+          setData(res.data.message);
+          setLoadingData(false);
+          console.log(res.data.message);
+        });
+    };
+    
+    if(loadingData){
+      getData();
+    }
+  });
 
   const {
     getTableProps,
@@ -76,9 +75,13 @@ export const Roterizador = () => {
         'PRAZO_ENTREGA',
         'HORARIO_INICIO_JANELA',
         'TEMPO_ATENDIMENTO',
+        'TIPO_DOCUMENTO',
+        'CHAVE_ACESSO',
+        'VOLUME',
       ]
     }
   },
+    useSortBy,
     usePagination,
     useRowSelect,
     (hooks) => {
@@ -99,7 +102,8 @@ export const Roterizador = () => {
           ...columns,
         ];
       });
-    });
+    }
+    );
 
   // const firstPageRows = rows.slice(0, 200);
   const { pageIndex, pageSize } = state;

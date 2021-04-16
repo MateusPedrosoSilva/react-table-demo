@@ -24,12 +24,12 @@ export const COLUMNS = [
   {
     Header: 'Referência de rota',
     Footer: 'Referência de rota',
-    accessor: 'REFERENCIA_DE_ROTA',
+    accessor: 'REFERENCIA_DA_ROTA',
   },
   {
     Header: 'Data início rota',
     Footer: 'Data início rota',
-    accessor: 'DATA_INICIO_ROTA',
+    accessor: 'DATA_DE_INICIO_ROTA',
   },
   {
     Header: 'Data previsão de atendimento',
@@ -49,7 +49,7 @@ export const COLUMNS = [
   {
     Header: 'Cód. destino CPF',
     Footer: 'Cód. destino CPF',
-    accessor: 'in',
+    accessor: 'COD_DESTINO_CPF',
   },
   {
     Header: 'Cód. embarcador',
