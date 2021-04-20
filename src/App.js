@@ -1,5 +1,11 @@
 import './App.css';
 import { Roterizador } from './components/Roterizador';
+
+// import pdfMake from "pdfmake/build/pdfmake";
+// import pdfFonts from "pdfmake/build/vfs_fonts";
+
+// import { Impressao } from './impressao';
+
 // import { RowSelection } from './components/RowselectionTable';
 // import { FilteringTable } from './components/FilteringTable';
 // import { PaginationTable } from './components/PaginationTable';
@@ -16,5 +22,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;

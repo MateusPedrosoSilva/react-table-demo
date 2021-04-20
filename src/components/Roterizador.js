@@ -5,6 +5,12 @@ import axios from 'axios';
 import { COLUMNS } from './columns';
 import './table.css';
 import { Checkbox } from './Checkbox';
+import moment from 'moment';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable'
+
+import imagem from '../images/lider.png';
+
 
 export const Roterizador = () => {
   //TODO: Manage the date, initial date
@@ -108,6 +114,7 @@ export const Roterizador = () => {
   // const firstPageRows = rows.slice(0, 200);
   const { pageIndex, pageSize } = state;
 
+
   const modalBody = () => (
     // Build the modal body
     <div>
@@ -127,6 +134,64 @@ export const Roterizador = () => {
       <button onClick={() => setShown(false)}>Fechar</button>
     </div>
   );
+
+  const pdfGenerate=()=>{
+    var doc = new jsPDF('landscape', 'px', 'a4', 'false');
+
+   
+   var bodyTable = [];
+   JSON.parse(sendData).atividades.forEach(element => {
+     bodyTable.push([element.DOCUMENTO, element.MUNICIPIO, element.BAIRRO,element.LOGRADOURO, element.COD_DESTINO_CPF ])
+
+   });
+
+   var columns = ["Pedido", "Cidade", "Bairro", "Logradouro","CEP"];
+   console.log(bodyTable);
+   doc.autoTable(columns, bodyTable,  {
+    headStyles: {
+       fillColor: [255,0,0]
+    },
+    startY: 70
+});
+   
+
+var image = new Image();
+// image.src = "https://js.cx/clipart/train.gif";
+image.src = imagem;
+
+
+image.onload = function(){
+  doc.addImage(image, 'PNG', 270, 10, 70, 40); 
+  console.log('carregou');
+  var data = Date.now();
+  var dataFormatada = moment(data).format('DD-MM-YYYY');
+
+   doc.text(30,65,  'PLACA: '+ String(JSON.parse(sendData).atividades[0].PLACA));
+   doc.text(400,65, 'DATA: ' + String(dataFormatada) );
+ 
+   doc.autoPrint();
+   
+   window.open(doc.output('bloburl'), '_blank',"toolbar=no,status=no,menubar=no,scrollbars=no,resizable=no,modal=yes,top=200,left=350,width=800,height=600");
+   
+  doc.save('resultado.pdf');
+}
+
+image.onerror = function(e){
+  console.log('error', e);
+}
+
+
+
+
+
+    // doc.setLineWidth(1.0); 
+    // doc.setDrawColor(0, 0, 0);
+
+    // doc.line(450, 400, 300, 400);
+// doc.addImage(image, 'PNG', 300, 80, 900, 50); 
+  // doc.autotable(columns, bodyTable);
+  
+ }
 
 
   return (
@@ -215,6 +280,9 @@ export const Roterizador = () => {
           }})
         }> Enviar para Senior </button>
         <button onClick={() => setShown(true)}>Prever envio</button>
+        <button onClick={ async() => pdfGenerate()}>
+  Gerar pdf
+</button>
         {shown && ReactDOM.createPortal(modalBody(), document.body)}
       </div>
       
