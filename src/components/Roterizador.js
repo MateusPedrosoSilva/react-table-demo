@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { useTable, useRowSelect, usePagination, useSortBy } from "react-table";
+import { useTable, useRowSelect, usePagination, useSortBy, use, useGlobalFilter } from "react-table";
 import axios from 'axios';
 import { COLUMNS } from './columns';
 import './table.css';
@@ -8,6 +8,8 @@ import { Checkbox } from './Checkbox';
 import moment from 'moment';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable'
+
+import { GlobalFilter } from './GlobalFilter'
 
 import imagem from '../images/lider.png';
 
@@ -26,21 +28,20 @@ export const Roterizador = () => {
 
   const columns = useMemo(() => COLUMNS, []);
 
+
+  async function getData(){
+    await axios
+      .get(`http://10.15.2.48:7777/listarPedidos?data_inicial=${dataInicial}&data_final=${dataFinal}`)
+      .then((res) => {
+        setData(res.data.message);
+        setLoadingData(false);
+        console.log(res.data.message);
+      });
+  };
+  
   useEffect(() => {
-    async function getData(){
-      await axios
-        .get(`http://10.15.2.48:7777/listarPedidos?data_inicial=${dataInicial}&data_final=${dataFinal}`)
-        .then((res) => {
-          setData(res.data.message);
-          setLoadingData(false);
-          console.log(res.data.message);
-        });
-    };
-    
-    if(loadingData){
       getData();
-    }
-  });
+  }, [loadingData]);
 
   const {
     getTableProps,
@@ -58,6 +59,7 @@ export const Roterizador = () => {
     pageCount,
     setPageSize,
     state,
+    setGlobalFilter,
     prepareRow,
     selectedFlatRows,
   } = useTable({
@@ -87,6 +89,7 @@ export const Roterizador = () => {
       ]
     }
   },
+    useGlobalFilter,
     useSortBy,
     usePagination,
     useRowSelect,
@@ -112,7 +115,7 @@ export const Roterizador = () => {
     );
 
   // const firstPageRows = rows.slice(0, 200);
-  const { pageIndex, pageSize } = state;
+  const { pageIndex, pageSize, globalFilter } = state;
 
 
   const modalBody = () => (
@@ -196,6 +199,7 @@ image.onerror = function(e){
 
   return (
     <>
+    <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       {
         loadingData ? (<p>Carregando as informações...</p>):(<table {...getTableProps()}>
         <thead>
