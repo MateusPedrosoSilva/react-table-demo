@@ -347,7 +347,21 @@ export const Roterizador = () => {
             Gerar pdf
 </button>
 
-         
+
+          <BasicTable dados = {sendData} />
+
+          {/* <pre>
+            <code>
+              {sendData}
+            </code>
+          </pre> */}
+
+          <button onClick={() => setShown(true)}>Prever envio</button>
+
+          {shown && ReactDOM.createPortal(modalBody(), document.body)}
+
+
+
         </Modal>
 
 
