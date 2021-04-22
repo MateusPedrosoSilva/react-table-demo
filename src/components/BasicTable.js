@@ -5,12 +5,14 @@ import { COLUMNS } from './columns';
 // import { GROUPED_COLUMNS } from './columns';
 import './table.css';
 
-export const BasicTable = () => {
+export const BasicTable = (props) => {
 
   const columns = useMemo(() => COLUMNS, []);
   // const columns = useMemo(() => GROUPED_COLUMNS, []);
   const data = useMemo(() => MOCK_DATA, []);
+// const data = props.dados;
 
+console.log(JSON.stringify(props.dados));
   const {
     getTableProps,
     getTableBodyProps,
