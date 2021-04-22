@@ -15,6 +15,7 @@ import { GlobalFilter } from './GlobalFilter'
 
 import imagem from '../images/lider.png';
 
+import DatePicker from 'react-date-picker';
 
 export const Roterizador = () => {
   //TODO: Manage the date, initial date
@@ -22,8 +23,8 @@ export const Roterizador = () => {
   const [data, setData] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
   const [shown, setShown] = useState(false);
-  const [dataInicial, setDataInicial] = useState(1210413);
-  const [dataFinal, setDataFinal] = useState(1210416);
+  const [dataInicial, setDataInicial] = useState(new Date());
+  const [dataFinal, setDataFinal] = useState(new Date());
   // const [sendData, setSendData] = useState({});
 
   var sendData;
@@ -31,18 +32,40 @@ export const Roterizador = () => {
   const columns = useMemo(() => COLUMNS, []);
 
 
-  async function getData(){
+  async function getData(datai1, dataf1) {
+     if(datai1 != null){
+      var dataFormatadaInicial = moment(datai1).format('YY-MM-DD');
+      var partei = dataFormatadaInicial.split('-');
+      dataFormatadaInicial = `1${partei[0]}${partei[1]}${partei[2]}`;
+       datai1 = dataFormatadaInicial;
+
+     }else{
+      var dataFormatadaInicialNula = moment(datai1).format('YY-MM-DD');
+       datai1 = dataFormatadaInicialNula;
+     }
+
+     if(dataf1 != null){
+      var dataFormatadaFinal = moment(dataf1).format('YY-MM-DD');
+      var partef = dataFormatadaFinal.split('-');
+      dataFormatadaFinal = `1${partef[0]}${partef[1]}${partef[2]}`;
+      dataf1 = dataFormatadaFinal;
+
+    }else{
+      var dataFormatada2 = moment(dataf1).format('YY-MM-DD');
+      dataf1 = dataFormatada2;
+    }
+
     await axios
-      .get(`http://10.15.2.48:7777/listarPedidos?data_inicial=${dataInicial}&data_final=${dataFinal}`)
+      .get(`http://10.15.2.48:7777/listarPedidos?data_inicial=${datai1}&data_final=${dataf1}`)
       .then((res) => {
         setData(res.data.message);
         setLoadingData(false);
         console.log(res.data.message);
       });
   };
-  
+
   useEffect(() => {
-      getData();
+    getData();
   }, [loadingData]);
 
   const {
@@ -67,7 +90,7 @@ export const Roterizador = () => {
   } = useTable({
     columns,
     data,
-    initialState: { 
+    initialState: {
       pageIndex: 0,
       hiddenColumns: [
         'SEGUNDA_PLACA',
@@ -114,7 +137,7 @@ export const Roterizador = () => {
         ];
       });
     }
-    );
+  );
 
   // const firstPageRows = rows.slice(0, 200);
   const { pageIndex, pageSize, globalFilter } = state;
@@ -140,50 +163,50 @@ export const Roterizador = () => {
     </div>
   );
 
-  const pdfGenerate=()=>{
+  const pdfGenerate = () => {
     var doc = new jsPDF('landscape', 'px', 'a4', 'false');
 
-   
-   var bodyTable = [];
-   JSON.parse(sendData).atividades.forEach(element => {
-     bodyTable.push([element.DOCUMENTO, element.MUNICIPIO, element.BAIRRO,element.LOGRADOURO, element.COD_DESTINO_CPF ])
 
-   });
+    var bodyTable = [];
+    JSON.parse(sendData).atividades.forEach(element => {
+      bodyTable.push([element.DOCUMENTO, element.MUNICIPIO, element.BAIRRO, element.LOGRADOURO, element.COD_DESTINO_CPF])
 
-   var columns = ["Pedido", "Cidade", "Bairro", "Logradouro","CEP"];
-   console.log(bodyTable);
-   doc.autoTable(columns, bodyTable,  {
-    headStyles: {
-       fillColor: [255,0,0]
-    },
-    startY: 70
-});
-   
+    });
 
-var image = new Image();
-// image.src = "https://js.cx/clipart/train.gif";
-image.src = imagem;
+    var columns = ["Pedido", "Cidade", "Bairro", "Logradouro", "CEP"];
+    console.log(bodyTable);
+    doc.autoTable(columns, bodyTable, {
+      headStyles: {
+        fillColor: [255, 0, 0]
+      },
+      startY: 70
+    });
 
 
-image.onload = function(){
-  doc.addImage(image, 'PNG', 270, 10, 70, 40); 
-  console.log('carregou');
-  var data = Date.now();
-  var dataFormatada = moment(data).format('DD-MM-YYYY');
+    var image = new Image();
+    // image.src = "https://js.cx/clipart/train.gif";
+    image.src = imagem;
 
-   doc.text(30,65,  'PLACA: '+ String(JSON.parse(sendData).atividades[0].PLACA));
-   doc.text(400,65, 'DATA: ' + String(dataFormatada) );
- 
-   doc.autoPrint();
-   
-   window.open(doc.output('bloburl'), '_blank',"toolbar=no,status=no,menubar=no,scrollbars=no,resizable=no,modal=yes,top=200,left=350,width=800,height=600");
-   
-  doc.save('resultado.pdf');
-}
 
-image.onerror = function(e){
-  console.log('error', e);
-}
+    image.onload = function () {
+      doc.addImage(image, 'PNG', 270, 10, 70, 40);
+      console.log('carregou');
+      var data = Date.now();
+      var dataFormatada = moment(data).format('DD-MM-YYYY');
+
+      doc.text(30, 65, 'PLACA: ' + String(JSON.parse(sendData).atividades[0].PLACA));
+      doc.text(400, 65, 'DATA: ' + String(dataFormatada));
+
+      doc.autoPrint();
+
+      window.open(doc.output('bloburl'), '_blank', "toolbar=no,status=no,menubar=no,scrollbars=no,resizable=no,modal=yes,top=200,left=350,width=800,height=600");
+
+      doc.save('resultado.pdf');
+    }
+
+    image.onerror = function (e) {
+      console.log('error', e);
+    }
 
 
 
@@ -193,60 +216,77 @@ image.onerror = function(e){
     // doc.setDrawColor(0, 0, 0);
 
     // doc.line(450, 400, 300, 400);
-// doc.addImage(image, 'PNG', 300, 80, 900, 50); 
-  // doc.autotable(columns, bodyTable);
-  
- }
+    // doc.addImage(image, 'PNG', 300, 80, 900, 50); 
+    // doc.autotable(columns, bodyTable);
+
+  }
 
 
   return (
     <>
-    <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
-      {
-        loadingData ? (<p>Carregando as informações...</p>):(<table {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}> {column.render('Header')} </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {
-            // firstPageRows.map((row) => {
-            // rows.map((row) => {
-            page.map((row) => {
-              prepareRow(row);
+      <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />{'  '}
 
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return <td {...cell.getCellProps()}> {cell.render('Cell')} </td>
-                  })
-                  }
+      Data Inicial:{'  '}
+      <DatePicker
+        onChange={setDataInicial}
+        value={dataInicial}
+      />
+      
+      Data Final:{'  '}
+      <DatePicker
+        onChange={setDataFinal}
+        value={dataFinal}
+      />{'  '}
+
+      <button onClick={() => getData(dataInicial,dataFinal)}>
+        Atualizar
+      </button>
+
+      {
+        loadingData ? (<p>Carregando as informações...</p>) : (<table {...getTableProps()}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th {...column.getHeaderProps()}> {column.render('Header')} </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {
+              // firstPageRows.map((row) => {
+              // rows.map((row) => {
+              page.map((row) => {
+                prepareRow(row);
+
+                return (
+                  <tr {...row.getRowProps()}>
+                    {row.cells.map((cell) => {
+                      return <td {...cell.getCellProps()}> {cell.render('Cell')} </td>
+                    })
+                    }
+                  </tr>
+                )
+              })
+            }
+          </tbody>
+          <tfoot>
+            {footerGroups.map(
+              (footerGroup) => (
+                <tr {...footerGroup.getFooterGroupProps()}>
+                  {footerGroup.headers.map(
+                    (column) => (
+                      <td {...column.getFooterProps()}>
+                        {column.render('Footer')}
+                      </td>
+                    )
+                  )}
                 </tr>
               )
-            })
-          }
-        </tbody>
-        <tfoot>
-          {footerGroups.map(
-            (footerGroup) => (
-              <tr {...footerGroup.getFooterGroupProps()}>
-                {footerGroup.headers.map(
-                  (column) => (
-                    <td {...column.getFooterProps()}>
-                      {column.render('Footer')}
-                    </td>
-                  )
-                )}
-              </tr>
-            )
-          )}
-        </tfoot>
-      </table>)
+            )}
+          </tfoot>
+        </table>)
       }
       <div>
         <span>
@@ -280,34 +320,35 @@ image.onerror = function(e){
         <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}> {'>>'} </button>
       </div>
       <div>
-       
-
-<button onClick={()=> setModalIsOpen(true)}>Visualizar envio</button>
 
 
-      <Modal isOpen={modalIsOpen} shouldCloseOnOverlayClick={false} onRequestClose={()=> setModalIsOpen(false)}>
+        <button onClick={() => setModalIsOpen(true)}>Visualizar envio</button>
 
-    <button onClick={()=> setModalIsOpen(false)}>Fechar
+
+        <Modal isOpen={modalIsOpen} shouldCloseOnOverlayClick={false} onRequestClose={() => setModalIsOpen(false)}>
+
+          <button onClick={() => setModalIsOpen(false)}>Fechar
     </button>
 
-    <button onClick={ async () => await axios.post('http://10.15.2.48:7777/enviarPedidos', JSON.parse(sendData), {
-          headers: {
-            'Content-Type': 'application/json'
-          }})
-        }> Enviar para Senior </button>
-    <button onClick={ async() => pdfGenerate()}>
-  Gerar pdf
+          <button onClick={async () => await axios.post('http://10.15.2.48:7777/enviarPedidos', JSON.parse(sendData), {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          }> Enviar para Senior </button>
+          <button onClick={async () => pdfGenerate()}>
+            Gerar pdf
 </button>
 
-<button onClick={() => setShown(true)}>Prever envio</button>
-       
-       {shown && ReactDOM.createPortal(modalBody(), document.body)}
-       
-      </Modal>
+          <button onClick={() => setShown(true)}>Prever envio</button>
 
-      
+          {shown && ReactDOM.createPortal(modalBody(), document.body)}
+
+        </Modal>
+
+
       </div>
-      
+
     </>
   )
 }
