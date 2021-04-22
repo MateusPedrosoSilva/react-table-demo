@@ -348,15 +348,12 @@ export const Roterizador = () => {
 </button>
 
 
-          <BasicTable dados = {sendData} />
-
           {/* <pre>
             <code>
               {sendData}
             </code>
           </pre> */}
 
-          <button onClick={() => setShown(true)}>Prever envio</button>
 
           {shown && ReactDOM.createPortal(modalBody(), document.body)}
 
