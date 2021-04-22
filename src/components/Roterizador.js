@@ -9,6 +9,8 @@ import moment from 'moment';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable'
 
+import Modal from 'react-modal';
+
 import { GlobalFilter } from './GlobalFilter'
 
 import imagem from '../images/lider.png';
@@ -117,7 +119,7 @@ export const Roterizador = () => {
   // const firstPageRows = rows.slice(0, 200);
   const { pageIndex, pageSize, globalFilter } = state;
 
-
+  const [modalIsOpen, setModalIsOpen] = useState(false)
   const modalBody = () => (
     // Build the modal body
     <div>
@@ -278,16 +280,32 @@ image.onerror = function(e){
         <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}> {'>>'} </button>
       </div>
       <div>
-        <button onClick={ async () => await axios.post('http://10.15.2.48:7777/enviarPedidos', JSON.parse(sendData), {
+       
+
+<button onClick={()=> setModalIsOpen(true)}>Visualizar envio</button>
+
+
+      <Modal isOpen={modalIsOpen} shouldCloseOnOverlayClick={false} onRequestClose={()=> setModalIsOpen(false)}>
+
+    <button onClick={()=> setModalIsOpen(false)}>Fechar
+    </button>
+
+    <button onClick={ async () => await axios.post('http://10.15.2.48:7777/enviarPedidos', JSON.parse(sendData), {
           headers: {
             'Content-Type': 'application/json'
           }})
         }> Enviar para Senior </button>
-        <button onClick={() => setShown(true)}>Prever envio</button>
-        <button onClick={ async() => pdfGenerate()}>
+    <button onClick={ async() => pdfGenerate()}>
   Gerar pdf
 </button>
-        {shown && ReactDOM.createPortal(modalBody(), document.body)}
+
+<button onClick={() => setShown(true)}>Prever envio</button>
+       
+       {shown && ReactDOM.createPortal(modalBody(), document.body)}
+       
+      </Modal>
+
+      
       </div>
       
     </>
