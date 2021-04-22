@@ -171,11 +171,11 @@ export const Roterizador = () => {
 
     var bodyTable = [];
     JSON.parse(sendData).atividades.forEach(element => {
-      bodyTable.push([element.DOCUMENTO, element.MUNICIPIO, element.BAIRRO, element.LOGRADOURO, element.COD_DESTINO_CPF])
+      bodyTable.push([element.DOCUMENTO, element.SEQUENCIA, element.QUANTIDADE, element.NOME_CLIENTE])
 
     });
 
-    var columns = ["Pedido", "Cidade", "Bairro", "Logradouro", "CEP"];
+    var columns = ["N. Fiscal", "Pedido", "Quantidade", "Cliente"];
     console.log(bodyTable);
     doc.autoTable(columns, bodyTable, {
       headStyles: {
