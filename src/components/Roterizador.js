@@ -325,6 +325,9 @@ export const Roterizador = () => {
 
 
         <button onClick={() => setModalIsOpen(true)}>Visualizar envio</button>
+        <button onClick={() => setShown(true)}>Prever envio</button>
+
+{shown && ReactDOM.createPortal(modalBody(), document.body)}
 
 
         <Modal isOpen={modalIsOpen} shouldCloseOnOverlayClick={false} onRequestClose={() => setModalIsOpen(false)}>
@@ -332,6 +335,8 @@ export const Roterizador = () => {
           <button onClick={() => setModalIsOpen(false)}>Fechar
     </button>
 
+
+<BasicTable dados = {sendData}/>
           <button onClick={async () => await axios.post('http://10.15.2.48:7777/enviarPedidos', JSON.parse(sendData), {
             headers: {
               'Content-Type': 'application/json'
@@ -341,6 +346,7 @@ export const Roterizador = () => {
           <button onClick={async () => pdfGenerate()}>
             Gerar pdf
 </button>
+
 
           <BasicTable dados = {sendData} />
 
@@ -353,6 +359,7 @@ export const Roterizador = () => {
           <button onClick={() => setShown(true)}>Prever envio</button>
 
           {shown && ReactDOM.createPortal(modalBody(), document.body)}
+
 
 
         </Modal>

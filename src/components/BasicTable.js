@@ -9,10 +9,13 @@ export const BasicTable = (props) => {
 
   const columns = useMemo(() => COLUMNS, []);
   // const columns = useMemo(() => GROUPED_COLUMNS, []);
-  const data = useMemo(() => MOCK_DATA, []);
-// const data = props.dados;
 
-console.log(JSON.stringify(props.dados));
+  var tbl =  JSON.parse(props.dados);
+console.log(typeof tbl);
+
+  const data = tbl.atividades;
+
+
   const {
     getTableProps,
     getTableBodyProps,
