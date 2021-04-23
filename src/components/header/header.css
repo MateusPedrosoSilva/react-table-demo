@@ -1,3 +1,4 @@
+/* Paragrafos */
 p {
     padding-left: 10px;
     padding-right: 10px;
@@ -5,6 +6,7 @@ p {
     padding-top: 15px;
 }
 
+/* Botão de atualizar */
 .button {
     display: inline-block;
     padding: 10px 12px;
@@ -20,15 +22,34 @@ p {
     border-radius: 15px;
     box-shadow: 0 3px #999;
   }
-  
   .button:hover {background-color: #3e8e41}
-  
   .button:active {
     background-color: #3e8e41;
     box-shadow: 0 5px #666;
     transform: translateY(4px);
   }
 
+  /* Calendário  */
   .calendario {
       padding-right: 10px;
+  }
+
+  /* Botão das setas */
+  .buttonSeta {
+    border-radius: 10%;
+    background-color: #4CAF50;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .buttonSeta:hover {
+    background-color: #3e8e41
+  }
+  .buttonSeta:disabled {
+    opacity: 0.7;
+    cursor: default;
+  }
+  .buttonSeta:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
   }

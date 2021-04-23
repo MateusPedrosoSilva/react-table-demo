@@ -372,10 +372,10 @@ export const Roterizador = () => {
         </select>
       </div>
       <div>
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}> {'<<'} </button>
+        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage} className='buttonSeta'> {'<<'} </button>
         <button onClick={() => previousPage()} disabled={!canPreviousPage}> Anterior </button>
         <button onClick={() => nextPage()} disabled={!canNextPage}> Próxima </button>
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}> {'>>'} </button>
+        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage} className='buttonSeta'> {'>>'} </button>
       </div>
       <div>
 
