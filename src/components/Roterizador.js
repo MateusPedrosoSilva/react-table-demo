@@ -21,7 +21,7 @@ import imagem from '../images/lider.png';
 
 import DatePicker from 'react-date-picker';
 
-import { BasicTable } from './BasicTable';
+import {BasicTable} from './BasicTable';
 
 export const Roterizador = () => {
   //TODO: Manage the date, initial date
@@ -39,24 +39,24 @@ export const Roterizador = () => {
 
 
   async function getData(datai1, dataf1) {
-    if (datai1 != null) {
+     if(datai1 != null){
       var dataFormatadaInicial = moment(datai1).format('YY-MM-DD');
       var partei = dataFormatadaInicial.split('-');
       dataFormatadaInicial = `1${partei[0]}${partei[1]}${partei[2]}`;
-      datai1 = dataFormatadaInicial;
+       datai1 = dataFormatadaInicial;
 
-    } else {
+     }else{
       var dataFormatadaInicialNula = moment(datai1).format('YY-MM-DD');
-      datai1 = dataFormatadaInicialNula;
-    }
+       datai1 = dataFormatadaInicialNula;
+     }
 
-    if (dataf1 != null) {
+     if(dataf1 != null){
       var dataFormatadaFinal = moment(dataf1).format('YY-MM-DD');
       var partef = dataFormatadaFinal.split('-');
       dataFormatadaFinal = `1${partef[0]}${partef[1]}${partef[2]}`;
       dataf1 = dataFormatadaFinal;
 
-    } else {
+    }else{
       var dataFormatada2 = moment(dataf1).format('YY-MM-DD');
       dataf1 = dataFormatada2;
     }
@@ -66,7 +66,7 @@ export const Roterizador = () => {
       .then((res) => {
         setData(res.data.message);
         setLoadingData(false);
-        console.log(res.data.message);
+        // console.log(res.data.message);
       });
   };
 
@@ -74,7 +74,7 @@ export const Roterizador = () => {
     getData();
   }, [loadingData]);
 
-  const MenuExampleInputs = () => (
+    const MenuExampleInputs = () => (
     <Menu>
       <Menu.Item>
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
@@ -190,6 +190,7 @@ export const Roterizador = () => {
             null,
             2
           )
+          
           }
         </code>
       </pre>
@@ -197,6 +198,50 @@ export const Roterizador = () => {
     </div>
   );
 
+  const createData = (dados1) => (
+    <div>
+        <Modal isOpen={modalIsOpen} shouldCloseOnOverlayClick={false} onRequestClose={() => setModalIsOpen(false)}>
+
+<code>
+{sendData = JSON.stringify({
+      //selectedFlatRows: selectedFlatRows.map((row) => row.original),
+      atividades: selectedFlatRows.map((row) => row.original),
+    },
+      null,
+      2
+    )}
+</code>
+          <button onClick={() => setModalIsOpen(false)}>Fechar
+    </button>
+
+
+<BasicTable dados = {sendData}/>
+          <button onClick={async () => await axios.post('http://10.15.2.48:7777/enviarPedidos', JSON.parse(sendData), {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          }> Enviar para Senior </button>
+          <button onClick={async () => pdfGenerate()}>
+            Gerar pdf
+</button>
+
+
+          {/* <pre>
+            <code>
+              {sendData}
+            </code>
+          </pre> */}
+
+
+          {shown && ReactDOM.createPortal(modalBody(), document.body)}
+
+
+
+        </Modal>
+
+    </div>
+  );
   const pdfGenerate = () => {
     var doc = new jsPDF('landscape', 'px', 'a4', 'false');
 
@@ -208,7 +253,7 @@ export const Roterizador = () => {
     });
 
     var columns = ["N. Fiscal", "Pedido", "Quantidade", "Cliente"];
-    console.log(bodyTable);
+    // console.log(bodyTable);
     doc.autoTable(columns, bodyTable, {
       headStyles: {
         fillColor: [255, 0, 0]
@@ -242,13 +287,6 @@ export const Roterizador = () => {
       console.log('error', e);
     }
 
-    // doc.setLineWidth(1.0); 
-    // doc.setDrawColor(0, 0, 0);
-
-    // doc.line(450, 400, 300, 400);
-    // doc.addImage(image, 'PNG', 300, 80, 900, 50); 
-    // doc.autotable(columns, bodyTable);
-
   }
 
 
@@ -270,8 +308,10 @@ export const Roterizador = () => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {
-              // firstPageRows.map((row) => {
+            { 
+
+            
+              // firstPageRows.map((row) => {  
               // rows.map((row) => {
               page.map((row) => {
                 prepareRow(row);
@@ -340,17 +380,27 @@ export const Roterizador = () => {
 
         <button onClick={() => setModalIsOpen(true)}>Visualizar envio</button>
         <button onClick={() => setShown(true)}>Prever envio</button>
+        <button onClick={() => createData()}>Criar envio</button>
 
-        {shown && ReactDOM.createPortal(modalBody(), document.body)}
+{shown && ReactDOM.createPortal(modalBody(), document.body)}
 
 
         <Modal isOpen={modalIsOpen} shouldCloseOnOverlayClick={false} onRequestClose={() => setModalIsOpen(false)}>
 
+<code>
+{sendData = JSON.stringify({
+      //selectedFlatRows: selectedFlatRows.map((row) => row.original),
+      atividades: selectedFlatRows.map((row) => row.original),
+    },
+      null,
+      2
+    )}
+</code>
           <button onClick={() => setModalIsOpen(false)}>Fechar
     </button>
 
 
-          <BasicTable dados={sendData} />
+<BasicTable dados = {sendData}/>
           <button onClick={async () => await axios.post('http://10.15.2.48:7777/enviarPedidos', JSON.parse(sendData), {
             headers: {
               'Content-Type': 'application/json'
