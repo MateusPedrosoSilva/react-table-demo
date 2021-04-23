@@ -62,7 +62,7 @@ export const Roterizador = () => {
       .then((res) => {
         setData(res.data.message);
         setLoadingData(false);
-        console.log(res.data.message);
+        // console.log(res.data.message);
       });
   };
 
@@ -158,6 +158,7 @@ export const Roterizador = () => {
             null,
             2
           )
+          
           }
         </code>
       </pre>
@@ -165,6 +166,50 @@ export const Roterizador = () => {
     </div>
   );
 
+  const createData = (dados1) => (
+    <div>
+        <Modal isOpen={modalIsOpen} shouldCloseOnOverlayClick={false} onRequestClose={() => setModalIsOpen(false)}>
+
+<code>
+{sendData = JSON.stringify({
+      //selectedFlatRows: selectedFlatRows.map((row) => row.original),
+      atividades: selectedFlatRows.map((row) => row.original),
+    },
+      null,
+      2
+    )}
+</code>
+          <button onClick={() => setModalIsOpen(false)}>Fechar
+    </button>
+
+
+<BasicTable dados = {sendData}/>
+          <button onClick={async () => await axios.post('http://10.15.2.48:7777/enviarPedidos', JSON.parse(sendData), {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          }> Enviar para Senior </button>
+          <button onClick={async () => pdfGenerate()}>
+            Gerar pdf
+</button>
+
+
+          {/* <pre>
+            <code>
+              {sendData}
+            </code>
+          </pre> */}
+
+
+          {shown && ReactDOM.createPortal(modalBody(), document.body)}
+
+
+
+        </Modal>
+
+    </div>
+  );
   const pdfGenerate = () => {
     var doc = new jsPDF('landscape', 'px', 'a4', 'false');
 
@@ -176,7 +221,7 @@ export const Roterizador = () => {
     });
 
     var columns = ["N. Fiscal", "Pedido", "Quantidade", "Cliente"];
-    console.log(bodyTable);
+    // console.log(bodyTable);
     doc.autoTable(columns, bodyTable, {
       headStyles: {
         fillColor: [255, 0, 0]
@@ -211,15 +256,6 @@ export const Roterizador = () => {
     }
 
 
-
-
-
-    // doc.setLineWidth(1.0); 
-    // doc.setDrawColor(0, 0, 0);
-
-    // doc.line(450, 400, 300, 400);
-    // doc.addImage(image, 'PNG', 300, 80, 900, 50); 
-    // doc.autotable(columns, bodyTable);
 
   }
 
@@ -326,12 +362,22 @@ export const Roterizador = () => {
 
         <button onClick={() => setModalIsOpen(true)}>Visualizar envio</button>
         <button onClick={() => setShown(true)}>Prever envio</button>
+        <button onClick={() => createData()}>Criar envio</button>
 
 {shown && ReactDOM.createPortal(modalBody(), document.body)}
 
 
         <Modal isOpen={modalIsOpen} shouldCloseOnOverlayClick={false} onRequestClose={() => setModalIsOpen(false)}>
 
+<code>
+{sendData = JSON.stringify({
+      //selectedFlatRows: selectedFlatRows.map((row) => row.original),
+      atividades: selectedFlatRows.map((row) => row.original),
+    },
+      null,
+      2
+    )}
+</code>
           <button onClick={() => setModalIsOpen(false)}>Fechar
     </button>
 
