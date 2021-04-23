@@ -292,8 +292,10 @@ export const Roterizador = () => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {
-              // firstPageRows.map((row) => {
+            { 
+
+            
+              // firstPageRows.map((row) => {  
               // rows.map((row) => {
               page.map((row) => {
                 prepareRow(row);
