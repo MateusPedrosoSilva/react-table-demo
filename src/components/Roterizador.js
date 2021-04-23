@@ -286,7 +286,6 @@ export const Roterizador = () => {
     image.onerror = function (e) {
       console.log('error', e);
     }
-
   }
 
 
