@@ -7,9 +7,13 @@ import './table.css';
 import { Checkbox } from './Checkbox';
 import moment from 'moment';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable'
+import 'jspdf-autotable';
+import './header/header.css';
+import 'semantic-ui-css/semantic.min.css';
 
 import Modal from 'react-modal';
+
+import { Menu } from 'semantic-ui-react';
 
 import { GlobalFilter } from './GlobalFilter'
 
@@ -17,7 +21,7 @@ import imagem from '../images/lider.png';
 
 import DatePicker from 'react-date-picker';
 
-import {BasicTable} from './BasicTable';
+import { BasicTable } from './BasicTable';
 
 export const Roterizador = () => {
   //TODO: Manage the date, initial date
@@ -35,24 +39,24 @@ export const Roterizador = () => {
 
 
   async function getData(datai1, dataf1) {
-     if(datai1 != null){
+    if (datai1 != null) {
       var dataFormatadaInicial = moment(datai1).format('YY-MM-DD');
       var partei = dataFormatadaInicial.split('-');
       dataFormatadaInicial = `1${partei[0]}${partei[1]}${partei[2]}`;
-       datai1 = dataFormatadaInicial;
+      datai1 = dataFormatadaInicial;
 
-     }else{
+    } else {
       var dataFormatadaInicialNula = moment(datai1).format('YY-MM-DD');
-       datai1 = dataFormatadaInicialNula;
-     }
+      datai1 = dataFormatadaInicialNula;
+    }
 
-     if(dataf1 != null){
+    if (dataf1 != null) {
       var dataFormatadaFinal = moment(dataf1).format('YY-MM-DD');
       var partef = dataFormatadaFinal.split('-');
       dataFormatadaFinal = `1${partef[0]}${partef[1]}${partef[2]}`;
       dataf1 = dataFormatadaFinal;
 
-    }else{
+    } else {
       var dataFormatada2 = moment(dataf1).format('YY-MM-DD');
       dataf1 = dataFormatada2;
     }
@@ -69,6 +73,34 @@ export const Roterizador = () => {
   useEffect(() => {
     getData();
   }, [loadingData]);
+
+  const MenuExampleInputs = () => (
+    <Menu>
+      <Menu.Item>
+        <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+      </Menu.Item>
+
+      <Menu.Item position='right' >
+          <p>Data Inicial:</p>
+          <DatePicker
+            className='calendario'
+            onChange={setDataInicial}
+            value={dataInicial}
+          />
+
+          <p>Data Final:</p>
+          <DatePicker
+            className='calendario'
+            onChange={setDataFinal}
+            value={dataFinal}
+          />
+
+        <button onClick={() => getData(dataInicial, dataFinal)} className='button'>
+          Atualizar
+      </button>
+      </Menu.Item>
+    </Menu>
+  )
 
   const {
     getTableProps,
@@ -210,10 +242,6 @@ export const Roterizador = () => {
       console.log('error', e);
     }
 
-
-
-
-
     // doc.setLineWidth(1.0); 
     // doc.setDrawColor(0, 0, 0);
 
@@ -226,23 +254,9 @@ export const Roterizador = () => {
 
   return (
     <>
-      <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />{'  '}
-
-      Data Inicial:{'  '}
-      <DatePicker
-        onChange={setDataInicial}
-        value={dataInicial}
-      />
-      
-      Data Final:{'  '}
-      <DatePicker
-        onChange={setDataFinal}
-        value={dataFinal}
-      />{'  '}
-
-      <button onClick={() => getData(dataInicial,dataFinal)}>
-        Atualizar
-      </button>
+      <header>
+        {MenuExampleInputs()}
+      </header>
 
       {
         loadingData ? (<p>Carregando as informações...</p>) : (<table {...getTableProps()}>
@@ -327,7 +341,7 @@ export const Roterizador = () => {
         <button onClick={() => setModalIsOpen(true)}>Visualizar envio</button>
         <button onClick={() => setShown(true)}>Prever envio</button>
 
-{shown && ReactDOM.createPortal(modalBody(), document.body)}
+        {shown && ReactDOM.createPortal(modalBody(), document.body)}
 
 
         <Modal isOpen={modalIsOpen} shouldCloseOnOverlayClick={false} onRequestClose={() => setModalIsOpen(false)}>
@@ -336,7 +350,7 @@ export const Roterizador = () => {
     </button>
 
 
-<BasicTable dados = {sendData}/>
+          <BasicTable dados={sendData} />
           <button onClick={async () => await axios.post('http://10.15.2.48:7777/enviarPedidos', JSON.parse(sendData), {
             headers: {
               'Content-Type': 'application/json'
