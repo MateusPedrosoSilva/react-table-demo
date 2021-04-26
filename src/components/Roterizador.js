@@ -24,6 +24,16 @@ import DatePicker from 'react-date-picker';
 
 import { BasicTable } from './BasicTable';
 
+import { makeStyles } from '@material-ui/core/styles';
+import {Alert, AlertTitle } from '@material-ui/lab';
+
+
+import IconButton from '@material-ui/core/IconButton';
+import Collapse from '@material-ui/core/Collapse';
+import Button from '@material-ui/core/Button';
+import CloseIcon from '@material-ui/icons/Close';
+import { set } from 'date-fns';
+
 export const Roterizador = () => {
   //TODO: Manage the date, initial date
 
@@ -32,6 +42,8 @@ export const Roterizador = () => {
   const [shown, setShown] = useState(false);
   const [dataInicial, setDataInicial] = useState(new Date());
   const [dataFinal, setDataFinal] = useState(new Date());
+  const [open, setOpen] = useState(false);
+  const [success, setSuccess] = useState(true);
   // const [sendData, setSendData] = useState({});
 
   var sendData;
@@ -74,6 +86,16 @@ export const Roterizador = () => {
   useEffect(() => {
     getData();
   }, [loadingData]);
+
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      width: '100%',
+      '& > * + *': {
+        marginTop: theme.spacing(2),
+      },
+    },
+  }));
+  const classes = useStyles();
 
   const MenuExampleInputs = () => (
     <Menu>
@@ -210,6 +232,7 @@ export const Roterizador = () => {
   };
 
   const fecharModal = () => {
+    setOpen(false);
     setShown(false);
     setModalIsOpen(false);
   };
@@ -219,11 +242,11 @@ export const Roterizador = () => {
 
     var bodyTable = [];
     JSON.parse(sendData).atividades.forEach(element => {
-      bodyTable.push([element.DOCUMENTO, element.SEQUENCIA, element.QUANTIDADE, element.NOME_CLIENTE])
+      bodyTable.push([element.DOCUMENTO, element.SEQUENCIA, element.NOME_CLIENTE, element.QUANTIDADE, element.VALOR_MERCADORIA])
 
     });
 
-    var columns = ["N. Fiscal", "Pedido", "Quantidade", "Cliente"];
+    var columns = ["N. Fiscal", "Pedido","Cliente", "Quantidade", "Valor"];
     // console.log(bodyTable);
     doc.autoTable(columns, bodyTable, {
       headStyles: {
@@ -244,8 +267,8 @@ export const Roterizador = () => {
       var data = Date.now();
       var dataFormatada = moment(data).format('DD-MM-YYYY');
 
-      doc.text(30, 110, 'PLACA: ' + String(JSON.parse(sendData).atividades[0].PLACA));
-      doc.text(400, 110, 'DATA: ' + String(dataFormatada));
+      doc.text(350, 75, String(JSON.parse(sendData).atividades[0].PLACA));
+      doc.text(40, 75, String(dataFormatada));
 
       doc.autoPrint();
 
@@ -259,6 +282,7 @@ export const Roterizador = () => {
     }
   }
 
+ 
 
     //localmente
     async function postRequest(data) {
@@ -268,15 +292,19 @@ export const Roterizador = () => {
         }
       })
         .then(function (response) {
-          alert(JSON.stringify(response));
-          fecharModal();
+          
+          setOpen(true);
+          setSuccess(true);
+
+          
         })
         .catch(function (error) {
+          setOpen(true);
+          setSuccess(false);
           if (error.response) {
             console.log(error.response.data);
             console.log(error.response.status);
             console.log(error.response.headers);
-            alert(JSON.stringify(error.response.data.message));
           }
         })
         ;
@@ -385,7 +413,35 @@ export const Roterizador = () => {
         </code>
 
         <Modal isOpen={modalIsOpen} shouldCloseOnOverlayClick={false} onRequestClose={() => setModalIsOpen(false)}>
+        <div className={classes.root}>
+      <Collapse in={open && success}>
+       
+      <Alert
+        action={
+          <Button onClick={() => fecharModal()} color="inherit" size="small">
+            FECHAR
+          </Button>
+        }
+      >
+        Integrado com sucesso!
+      </Alert>
+      </Collapse>
 
+     
+      <Collapse in={open && !success}>
+       
+       <Alert
+         action={
+           <Button onClick={() => fecharModal()} color="inherit" size="small">
+             Fechar
+           </Button>
+         }
+         severity="error"
+       >
+        Erro ao integrar
+       </Alert>
+       </Collapse>
+    </div>
           <button onClick={() => fecharModal()}>Fechar
     </button>
 
