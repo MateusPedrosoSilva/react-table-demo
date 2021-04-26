@@ -17,7 +17,7 @@ import { Menu } from 'semantic-ui-react';
 
 import { GlobalFilter } from './GlobalFilter'
 
-import imagem from '../images/lider.png';
+import imagem from '../images/cabecalho.jpg';
 
 import DatePicker from 'react-date-picker';
 
@@ -228,7 +228,7 @@ export const Roterizador = () => {
       headStyles: {
         fillColor: [255, 0, 0]
       },
-      startY: 70
+      startY: 115
     });
 
 
@@ -238,13 +238,13 @@ export const Roterizador = () => {
 
 
     image.onload = function () {
-      doc.addImage(image, 'PNG', 270, 10, 70, 40);
+      doc.addImage(image, 'PNG', 70, 10, 500, 95);
       console.log('carregou');
       var data = Date.now();
       var dataFormatada = moment(data).format('DD-MM-YYYY');
 
-      doc.text(30, 65, 'PLACA: ' + String(JSON.parse(sendData).atividades[0].PLACA));
-      doc.text(400, 65, 'DATA: ' + String(dataFormatada));
+      doc.text(30, 110, 'PLACA: ' + String(JSON.parse(sendData).atividades[0].PLACA));
+      doc.text(400, 110, 'DATA: ' + String(dataFormatada));
 
       doc.autoPrint();
 
