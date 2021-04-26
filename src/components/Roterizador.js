@@ -10,6 +10,7 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import './header/header.css';
 import 'semantic-ui-css/semantic.min.css';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 import Modal from 'react-modal';
 
@@ -288,7 +289,7 @@ export const Roterizador = () => {
       </header>
 
       {
-        loadingData ? (<p>Carregando as informações...</p>) : (<table {...getTableProps()}>
+        loadingData ? (<LinearProgress />) : (<table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
