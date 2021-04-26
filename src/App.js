@@ -21,7 +21,7 @@ function App() {
     // </div>
     <div>
 
-      <RoterizadorTESTE />
+      <Roterizador />
     </div>
   );
 }

@@ -198,50 +198,20 @@ export const Roterizador = () => {
     </div>
   );
 
-  const createData = (dados1) => (
-    <div>
-      <Modal isOpen={modalIsOpen} shouldCloseOnOverlayClick={false} onRequestClose={() => setModalIsOpen(false)}>
-
-        <code>
-          {sendData = JSON.stringify({
-            //selectedFlatRows: selectedFlatRows.map((row) => row.original),
-            atividades: selectedFlatRows.map((row) => row.original),
-          },
-            null,
-            2
-          )}
-        </code>
-        <button onClick={() => setModalIsOpen(false)}>Fechar
-    </button>
 
 
-        <BasicTable dados={sendData} />
-        <button onClick={async () => await axios.post('http://10.15.2.48:7777/enviarPedidos', JSON.parse(sendData), {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        }> Enviar para Senior </button>
-        <button onClick={async () => pdfGenerate()}>
-          Gerar pdf
-</button>
+  
+  //GAMBIARRAS
+  const createData = () => {
+    // console.log('teste' + JSON.stringify(selectedFlatRows));
+    setModalIsOpen(true);
+    setShown(true);
+  };
 
-
-        {/* <pre>
-            <code>
-              {sendData}
-            </code>
-          </pre> */}
-
-
-        {shown && ReactDOM.createPortal(modalBody(), document.body)}
-
-
-
-      </Modal>
-
-    </div>
-  );
+  const fecharModal = () => {
+    setShown(false);
+    setModalIsOpen(false);
+  };
   const pdfGenerate = () => {
     var doc = new jsPDF('landscape', 'px', 'a4', 'false');
 
@@ -286,11 +256,30 @@ export const Roterizador = () => {
     image.onerror = function (e) {
       console.log('error', e);
     }
-
-
-
   }
 
+
+    //localmente
+    async function postRequest(data) {
+      await axios.post('http://10.15.2.48:7777/enviarPedidos', JSON.parse(data), {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(function (response) {
+          alert(JSON.stringify(response));
+          fecharModal();
+        })
+        .catch(function (error) {
+          if (error.response) {
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            alert(JSON.stringify(error.response.data.message));
+          }
+        })
+        ;
+    };
 
   return (
     <>
@@ -380,53 +369,34 @@ export const Roterizador = () => {
       <div>
 
 
-        <button onClick={() => setModalIsOpen(true)}>Visualizar envio</button>
-        <button onClick={() => setShown(true)}>Prever envio</button>
-        <button onClick={() => createData()}>Criar envio</button>
+        
+        <button onClick={() => createData()}>Visualizar envio</button>
 
         {shown && ReactDOM.createPortal(modalBody(), document.body)}
-
+        <code class='hide'>
+          {sendData = JSON.stringify({
+            //selectedFlatRows: selectedFlatRows.map((row) => row.original),
+            atividades: selectedFlatRows.map((row) => row.original),
+          },
+            null,
+            2
+          )}
+        </code>
 
         <Modal isOpen={modalIsOpen} shouldCloseOnOverlayClick={false} onRequestClose={() => setModalIsOpen(false)}>
 
-          <code>
-            {sendData = JSON.stringify({
-              //selectedFlatRows: selectedFlatRows.map((row) => row.original),
-              atividades: selectedFlatRows.map((row) => row.original),
-            },
-              null,
-              2
-            )}
-          </code>
-          <button onClick={() => setModalIsOpen(false)}>Fechar
+          <button onClick={() => fecharModal()}>Fechar
     </button>
 
 
           <BasicTable dados={sendData} />
-          <button onClick={async () => await axios.post('http://10.15.2.48:7777/enviarPedidos', JSON.parse(sendData), {
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          })
+          <button onClick={() => postRequest(sendData)
           }> Enviar para Senior </button>
           <button onClick={async () => pdfGenerate()}>
             Gerar pdf
 </button>
 
-
-          {/* <pre>
-            <code>
-              {sendData}
-            </code>
-          </pre> */}
-
-
-          {shown && ReactDOM.createPortal(modalBody(), document.body)}
-
-
-
         </Modal>
-
 
       </div>
 

@@ -411,15 +411,6 @@ export const RoterizadorTESTE = () => {
         </code>
         <Modal isOpen={modalIsOpen} shouldCloseOnOverlayClick={false} onRequestClose={() => setModalIsOpen(false)}>
 
-          {/* <code class='hide'>
-            {sendData = JSON.stringify({
-              //selectedFlatRows: selectedFlatRows.map((row) => row.original),
-              atividades: selectedFlatRows.map((row) => row.original),
-            },
-              null,
-              2
-            )}
-          </code> */}
           <button onClick={() => fecharModal()}>Fechar
     </button>
 
@@ -430,16 +421,6 @@ export const RoterizadorTESTE = () => {
           <button onClick={async () => pdfGenerate()}>
             Gerar pdf
 </button>
-
-
-          {/* <pre>
-            <code>
-              {sendData}
-            </code>
-          </pre> */}
-
-
-
 
         </Modal>
 
