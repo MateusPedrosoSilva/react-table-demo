@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { useTable, useRowSelect, usePagination, useSortBy, use, useGlobalFilter } from "react-table";
+import { useTable, useRowSelect, usePagination, useSortBy, useGlobalFilter } from "react-table";
 import axios from 'axios';
 import { COLUMNS } from './columns';
 import './table.css';
@@ -27,12 +27,8 @@ import { BasicTable } from './BasicTable';
 import { makeStyles } from '@material-ui/core/styles';
 import {Alert, AlertTitle } from '@material-ui/lab';
 
-
-import IconButton from '@material-ui/core/IconButton';
 import Collapse from '@material-ui/core/Collapse';
 import Button from '@material-ui/core/Button';
-import CloseIcon from '@material-ui/icons/Close';
-import { set } from 'date-fns';
 
 export const Roterizador = () => {
   //TODO: Manage the date, initial date
@@ -277,11 +273,7 @@ export const Roterizador = () => {
 
     image.onload = function () {
       doc.addImage(image, 'PNG', 70, 10, 500, 95);
-      console.log('carregou');
-      var data = Date.now();
-      var dataFormatada = moment(data).format('DD-MM-YYYY');
-
-      
+      console.log('carregou');      
 
       doc.autoPrint();
 
