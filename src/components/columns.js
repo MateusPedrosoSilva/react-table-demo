@@ -36,6 +36,7 @@ export const COLUMNS = [
     Footer: 'Data previsão de atendimento',
     accessor: 'DATA_PREVISAO_ATENDIMENTO',
   },
+  
   {
     Header: 'Pedido',
     Footer: 'Pedido',

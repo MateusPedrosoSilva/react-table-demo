@@ -217,7 +217,7 @@ export const Roterizador = () => {
           }
         </code>
       </pre>
-      <button onClick={() => setShown(false)}>Fechar</button>
+      {/* <button onClick={() => setShown(false)}>Fechar</button> */}
     </div>
   );
 
