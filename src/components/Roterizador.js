@@ -45,9 +45,10 @@ export const Roterizador = () => {
   const [open, setOpen] = useState(false);
   const [success, setSuccess] = useState(true);
   const [responseS,setResponseS] = useState([]);
+  const [btnVisivel, setBtnVisivel] = useState('x');
   // const [sendData, setSendData] = useState({});
 
-  document.body.style.zoom = "80%"
+  document.body.style.zoom = "80%";
 
   var sendData;
 
@@ -238,12 +239,14 @@ export const Roterizador = () => {
     setOpen(false);
     setShown(false);
     setModalIsOpen(false);
+    setBtnVisivel('x');
   };
 
   const fecharModalAlert = () => {
     setOpen(false);
     setShown(false);
     setModalIsOpen(false);
+    setBtnVisivel('x');
     document.location.reload(true);
   }
 
@@ -296,6 +299,7 @@ export const Roterizador = () => {
 
     //localmente
     async function postRequest(data) {
+      setBtnVisivel('');
       await axios.post('http://10.15.2.48:7777/enviarPedidos', JSON.parse(data), {
         headers: {
           'Content-Type': 'application/json'
@@ -461,7 +465,7 @@ export const Roterizador = () => {
 
           <BasicTable dados={sendData} />
           <button onClick={() => postRequest(sendData)
-          }> Enviar para Senior </button>
+          } disabled={!btnVisivel}> Enviar para Senior </button>
           <button onClick={async () => pdfGenerate()}>
             Gerar pdf
 </button>
