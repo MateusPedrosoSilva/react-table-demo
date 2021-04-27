@@ -44,6 +44,7 @@ export const Roterizador = () => {
   const [dataFinal, setDataFinal] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [success, setSuccess] = useState(true);
+  const [responseS,setResponseS] = useState([]);
   // const [sendData, setSendData] = useState({});
 
   var sendData;
@@ -236,6 +237,14 @@ export const Roterizador = () => {
     setShown(false);
     setModalIsOpen(false);
   };
+
+  const fecharModalAlert = () => {
+    setOpen(false);
+    setShown(false);
+    setModalIsOpen(false);
+    document.location.reload(true);
+  }
+
   const pdfGenerate = () => {
     var doc = new jsPDF('landscape', 'px', 'a4', 'false');
 
@@ -295,8 +304,7 @@ export const Roterizador = () => {
           
           setOpen(true);
           setSuccess(true);
-
-          
+          setResponseS("Ticket: " + response.data.message.ticket + "/ Status: OK! ");
         })
         .catch(function (error) {
           setOpen(true);
@@ -305,6 +313,7 @@ export const Roterizador = () => {
             console.log(error.response.data);
             console.log(error.response.status);
             console.log(error.response.headers);
+            setResponseS(error.response.data.message);
           }
         })
         ;
@@ -317,7 +326,7 @@ export const Roterizador = () => {
       </header>
 
       {
-        loadingData ? (<LinearProgress />) : (<table {...getTableProps()}>
+        loadingData ? (<LinearProgress color="green"/>) : (<table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
@@ -418,12 +427,13 @@ export const Roterizador = () => {
        
       <Alert
         action={
-          <Button onClick={() => fecharModal()} color="inherit" size="small">
+          <Button onClick={() => fecharModalAlert()} color="inherit" size="small">
             FECHAR
           </Button>
         }
       >
-        Integrado com sucesso!
+      <AlertTitle>Integrado com sucesso!</AlertTitle>
+        Response: {responseS}
       </Alert>
       </Collapse>
 
@@ -438,7 +448,9 @@ export const Roterizador = () => {
          }
          severity="error"
        >
-        Erro ao integrar
+       <AlertTitle>Erro ao integrar!</AlertTitle>
+        Erro: {responseS}
+
        </Alert>
        </Collapse>
     </div>
