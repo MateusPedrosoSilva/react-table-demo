@@ -1,17 +1,14 @@
 // import { format } from "date-fns";
 
 export const COLUMNS1 = [
-  {
-    Header: 'Prioridade',
-    accessor: 'id',
-  },
+ 
   {
     Header: 'Placa',
-    accessor: 'price',
+    accessor: 'PLACA',
   },
   {
     Header: 'Segunda placa',
-    accessor: 'description',
+    accessor: 'SEGUNDA_PLACA',
   },
   {
     Header: 'Motorista CPF',

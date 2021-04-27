@@ -276,8 +276,7 @@ export const Roterizador = () => {
       var data = Date.now();
       var dataFormatada = moment(data).format('DD-MM-YYYY');
 
-      doc.text(350, 75, String(JSON.parse(sendData).atividades[0].PLACA));
-      doc.text(40, 75, String(dataFormatada));
+      
 
       doc.autoPrint();
 
