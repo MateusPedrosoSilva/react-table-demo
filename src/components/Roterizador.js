@@ -47,6 +47,8 @@ export const Roterizador = () => {
   const [responseS,setResponseS] = useState([]);
   // const [sendData, setSendData] = useState({});
 
+  document.body.style.zoom = "80%"
+
   var sendData;
 
   const columns = useMemo(() => COLUMNS, []);
@@ -303,7 +305,7 @@ export const Roterizador = () => {
           
           setOpen(true);
           setSuccess(true);
-          setResponseS("Ticket: " + response.data.message.ticket + "/ Status: OK! ");
+          setResponseS("Ticket: " + response.data.message.ticket + " / Status: OK! ");
         })
         .catch(function (error) {
           setOpen(true);
