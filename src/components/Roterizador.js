@@ -40,25 +40,44 @@ export const Roterizador = () => {
   const [dataFinal, setDataFinal] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [success, setSuccess] = useState(true);
+
+  // Usado pra pegar a resposta do servidor e mostrar no Alert
   const [responseS,setResponseS] = useState([]);
+
+  // Deixa o botao de enviar para o serior desabilitado
   const [btnVisivel, setBtnVisivel] = useState('x');
+
   // const [sendData, setSendData] = useState({});
+
+  // Usado pra saber quando aparecer o loading bar
   const [loadBar, setLoadBar] = useState(true);
 
+  // Pega a data atual que a tabela ta buscando
+  const [dataAtualInicio, setDataAtualInicio] = useState(new Date());
+  const [dataAtualFinal, setDataAtualFinal] = useState(new Date());
+  
+  // Coloca pagina com zoom de 80%
   document.body.style.zoom = "80%";
+ 
+  // Pegando o primeiro dia e o atual do mês
+  var date = new Date();
+  const varDataInicial = new Date(date.getFullYear(), date.getMonth(), 1);
+  const varDataAtual = date;
 
   var sendData;
 
   const columns = useMemo(() => COLUMNS, []);
 
 
+
   async function getData(datai1, dataf1) {
+    setDataAtualInicio(datai1);
+    setDataAtualFinal(dataf1);
     if (datai1 != null) {
       var dataFormatadaInicial = moment(datai1).format('YY-MM-DD');
       var partei = dataFormatadaInicial.split('-');
       dataFormatadaInicial = `1${partei[0]}${partei[1]}${partei[2]}`;
       datai1 = dataFormatadaInicial;
-
     } else {
       var dataFormatadaInicialNula = moment(datai1).format('YY-MM-DD');
       datai1 = dataFormatadaInicialNula;
@@ -85,7 +104,8 @@ export const Roterizador = () => {
   };
 
   useEffect(() => {
-    getData();
+    getData(varDataInicial, varDataAtual);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadingData]);
 
   const useStyles = makeStyles((theme) => ({
@@ -233,6 +253,7 @@ export const Roterizador = () => {
     setLoadBar(false);
   };
 
+  //fecha quando da errado
   const fecharModal = () => {
     setOpen(false);
     setShown(false);
@@ -240,13 +261,14 @@ export const Roterizador = () => {
     setBtnVisivel('x');
   };
 
+  // fecha quando ta certo
   const fecharModalAlert = () => {
     setLoadingData(true);
     setOpen(false);
     setShown(false);
     setModalIsOpen(false);
     setBtnVisivel('x');
-    getData(dataInicial, dataFinal);
+    getData(dataAtualInicio, dataAtualFinal);
   }
 
   const pdfGenerate = () => {
