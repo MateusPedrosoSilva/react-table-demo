@@ -43,6 +43,7 @@ export const Roterizador = () => {
   const [responseS,setResponseS] = useState([]);
   const [btnVisivel, setBtnVisivel] = useState('x');
   // const [sendData, setSendData] = useState({});
+  const [loadBar, setLoadBar] = useState(true);
 
   document.body.style.zoom = "80%";
 
@@ -229,6 +230,7 @@ export const Roterizador = () => {
     // console.log('teste' + JSON.stringify(selectedFlatRows));
     setModalIsOpen(true);
     setShown(true);
+    setLoadBar(false);
   };
 
   const fecharModal = () => {
@@ -244,7 +246,7 @@ export const Roterizador = () => {
     setShown(false);
     setModalIsOpen(false);
     setBtnVisivel('x');
-    document.location.reload(true);
+    getData(dataInicial, dataFinal);
   }
 
   const pdfGenerate = () => {
@@ -302,11 +304,13 @@ export const Roterizador = () => {
           
           setOpen(true);
           setSuccess(true);
+          setLoadBar(false);
           setResponseS("Ticket: " + response.data.message.ticket + " / Status: OK! ");
         })
         .catch(function (error) {
           setOpen(true);
           setSuccess(false);
+          setLoadBar(false);
           if (error.response) {
             console.log(error.response.data);
             console.log(error.response.status);
@@ -324,7 +328,7 @@ export const Roterizador = () => {
       </header>
 
       {
-        loadingData ? (<LinearProgress color="green"/>) : (<table {...getTableProps()}>
+        loadingData ? (<LinearProgress color="secondary"/>) : (<table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
@@ -451,13 +455,14 @@ export const Roterizador = () => {
 
        </Alert>
        </Collapse>
+       <LinearProgress color="secondary" hidden={!loadBar}/>
     </div>
-          <button onClick={() => fecharModal()}>Fechar
+          <button onClick={() => fecharModal()} hidden={!shown}>Fechar
     </button>
 
 
           <BasicTable dados={sendData} />
-          <button onClick={() => postRequest(sendData)
+          <button onClick={() => {postRequest(sendData); setShown(false); setLoadBar(true)}
           } disabled={!btnVisivel}> Enviar para Senior </button>
           <button onClick={async () => pdfGenerate()}>
             Gerar pdf
