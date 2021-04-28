@@ -239,6 +239,7 @@ export const Roterizador = () => {
   };
 
   const fecharModalAlert = () => {
+    setLoadingData(true);
     setOpen(false);
     setShown(false);
     setModalIsOpen(false);
