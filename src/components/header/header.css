@@ -1,15 +1,21 @@
 p {
     padding-left: 10px;
     padding-right: 10px;
-    font-size: 15px;    
+    font-size: 20px;    
     padding-top: 15px;
 }
 
+label {
+font-size: 20px;
+padding-right: 10px;
+}
+
+/* Botão de atualizar */
 .button {
     display: inline-block;
     padding: 10px 12px;
     padding-left: 10px;
-    font-size: 12px;
+    font-size: 15px;
     cursor: pointer;
     text-align: center;
     text-decoration: none;
@@ -20,15 +26,104 @@ p {
     border-radius: 15px;
     box-shadow: 0 3px #999;
   }
-  
   .button:hover {background-color: #803232}
-  
   .button:active {
     background-color: #af4c4c;
     box-shadow: 0 5px #666;
     transform: translateY(4px);
   }
 
+  /* Calendário */
   .calendario {
       padding-right: 10px;
   }
+
+  /* Pesquisar */
+  .pesquisa {
+    width: 250px;
+    height: 30px;
+    font-size: 15px;
+  }
+  
+  /* Botão das setas */
+  .buttonSeta {
+    border-radius: 10%;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    height: 30px;
+    width: 50px;
+    font-size: 15px;
+  }
+  .buttonSeta:hover {
+    background-color: #727272
+  }
+  .buttonSeta:disabled {
+    opacity: 0.7;
+    cursor: default;
+  }
+  .buttonSeta:active {
+    box-shadow: 0 5px #666;
+    transform: translateY(1px);
+  }
+
+  /* Botões de proximo */
+  .buttonGeral {
+    border-radius: 10%;
+    margin-left: 5px;
+    margin-top: 10px;
+    height: 30px;
+    width: 80px;
+    font-size: 15px;
+  }
+  .buttonGeral:hover {
+    background-color: #727272
+  }
+
+/* botao de visualisar */
+.buttonEnviar {
+  border-radius: 10%;
+  margin-left: 10px;
+  margin-top: 15px;
+  height: 30px;
+  width: 130px;
+  font-size: 15px;
+}
+.buttonEnviar:hover {
+  background-color: #727272
+}
+
+/* Botão fechar */
+.buttonFechar {
+  border-radius: 10%;
+  margin-left: 10px;
+  margin-top: 15px;
+  margin-bottom: 20px;
+  height: 30px;
+  width: 130px;
+  font-size: 15px;
+}
+.buttonFechar:hover {
+  background-color: #727272
+}
+#divButton {
+  text-align: end;
+}
+
+/* Botão enviar modal */
+.buttonEnviarModal {
+  border-radius: 10%;
+  margin-left: 5px;
+  margin-top: 10px;
+  height: 30px;
+  width: 150px;
+  font-size: 15px;
+}
+.buttonEnviarModal:hover {
+  background-color: #727272
+}
+
+/* Texto */
+.texto {
+  font-size: 15px;
+}

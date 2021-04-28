@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAsyncDebounce } from 'react-table';
+import './header/header.css'; 
 
 export const GlobalFilter = ({ filter, setFilter }) => {
   const [value, setValue] = useState(filter);
@@ -9,11 +10,15 @@ export const GlobalFilter = ({ filter, setFilter }) => {
 
   return (
     <span>
-      Pesquisar: {' '}
+    <label>
+    Pesquisar:      
+    </label>
       <input placeholder='Rota, número de pedido...' value={value || ''} onChange={(e) => {
         setValue(e.target.value);
         onChange(e.target.value);
-      }} />
+      }} 
+        className='pesquisa'
+      />
     </span>
   )
 }

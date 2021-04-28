@@ -25,7 +25,7 @@ import DatePicker from 'react-date-picker';
 import { BasicTable } from './BasicTable';
 
 import { makeStyles } from '@material-ui/core/styles';
-import {Alert, AlertTitle } from '@material-ui/lab';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 import Collapse from '@material-ui/core/Collapse';
 import Button from '@material-ui/core/Button';
@@ -42,7 +42,7 @@ export const Roterizador = () => {
   const [success, setSuccess] = useState(true);
 
   // Usado pra pegar a resposta do servidor e mostrar no Alert
-  const [responseS,setResponseS] = useState([]);
+  const [responseS, setResponseS] = useState([]);
 
   // Deixa o botao de enviar para o serior desabilitado
   const [btnVisivel, setBtnVisivel] = useState('x');
@@ -52,17 +52,8 @@ export const Roterizador = () => {
   // Usado pra saber quando aparecer o loading bar
   const [loadBar, setLoadBar] = useState(true);
 
-  // Pega a data atual que a tabela ta buscando
-  const [dataAtualInicio, setDataAtualInicio] = useState(new Date());
-  const [dataAtualFinal, setDataAtualFinal] = useState(new Date());
-  
   // Coloca pagina com zoom de 80%
   document.body.style.zoom = "80%";
- 
-  // Pegando o primeiro dia e o atual do mês
-  var date = new Date();
-  const varDataInicial = new Date(date.getFullYear(), date.getMonth(), 1);
-  const varDataAtual = date;
 
   var sendData;
 
@@ -71,8 +62,6 @@ export const Roterizador = () => {
 
 
   async function getData(datai1, dataf1) {
-    setDataAtualInicio(datai1);
-    setDataAtualFinal(dataf1);
     if (datai1 != null) {
       var dataFormatadaInicial = moment(datai1).format('YY-MM-DD');
       var partei = dataFormatadaInicial.split('-');
@@ -104,8 +93,7 @@ export const Roterizador = () => {
   };
 
   useEffect(() => {
-    getData(varDataInicial, varDataAtual);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    getData();
   }, [loadingData]);
 
   const useStyles = makeStyles((theme) => ({
@@ -244,7 +232,7 @@ export const Roterizador = () => {
 
 
 
-  
+
   //GAMBIARRAS
   const createData = () => {
     // console.log('teste' + JSON.stringify(selectedFlatRows));
@@ -268,7 +256,7 @@ export const Roterizador = () => {
     setShown(false);
     setModalIsOpen(false);
     setBtnVisivel('x');
-    getData(dataAtualInicio, dataAtualFinal);
+    getData(dataInicial, dataFinal);
   }
 
   const pdfGenerate = () => {
@@ -281,7 +269,7 @@ export const Roterizador = () => {
 
     });
 
-    var columns = ["N. Fiscal", "Pedido","Cliente", "Quantidade", "Valor"];
+    var columns = ["N. Fiscal", "Pedido", "Cliente", "Quantidade", "Valor"];
     // console.log(bodyTable);
     doc.autoTable(columns, bodyTable, {
       headStyles: {
@@ -298,7 +286,7 @@ export const Roterizador = () => {
 
     image.onload = function () {
       doc.addImage(image, 'PNG', 70, 10, 500, 95);
-      console.log('carregou');      
+      console.log('carregou');
 
       doc.autoPrint();
 
@@ -312,36 +300,43 @@ export const Roterizador = () => {
     }
   }
 
- 
 
-    //localmente
-    async function postRequest(data) {
-      setBtnVisivel('');
-      await axios.post('http://10.15.2.48:7777/enviarPedidos', JSON.parse(data), {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-        .then(function (response) {
-          
+
+  //localmente
+  async function postRequest(data) {
+    setBtnVisivel('');
+    await axios.post('http://10.15.2.48:7777/enviarPedidos', JSON.parse(data), {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(function (response) {
+        setLoadBar(false);
+
+        if(response.data.message.ticket === undefined){
+          setOpen(false);
+          setSuccess(false);
+          setResponseS("Ticket: " + response.data.message.ticket + " / Status: ERRO! ");
+        } else {
           setOpen(true);
           setSuccess(true);
-          setLoadBar(false);
           setResponseS("Ticket: " + response.data.message.ticket + " / Status: OK! ");
-        })
-        .catch(function (error) {
-          setOpen(true);
-          setSuccess(false);
-          setLoadBar(false);
-          if (error.response) {
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-            setResponseS(error.response.data.message);
-          }
-        })
-        ;
-    };
+        }
+
+      })
+      .catch(function (error) {
+        setOpen(true);
+        setSuccess(false);
+        setLoadBar(false);
+        if (error.response) {
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          setResponseS(error.response.data.message);
+        } 
+      })
+      ;
+  };
 
   return (
     <>
@@ -350,7 +345,7 @@ export const Roterizador = () => {
       </header>
 
       {
-        loadingData ? (<LinearProgress color="secondary"/>) : (<table {...getTableProps()}>
+        loadingData ? (<LinearProgress color="secondary" />) : (<table {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
@@ -423,19 +418,19 @@ export const Roterizador = () => {
         </select>
       </div>
       <div>
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}> {'<<'} </button>
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}> Anterior </button>
-        <button onClick={() => nextPage()} disabled={!canNextPage}> Próxima </button>
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}> {'>>'} </button>
+        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage} className='buttonSeta'> {'<<'} </button>
+        <button onClick={() => previousPage()} disabled={!canPreviousPage} className='buttonGeral'> Anterior </button>
+        <button onClick={() => nextPage()} disabled={!canNextPage} className='buttonGeral'> Próxima </button>
+        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage} className='buttonSeta'> {'>>'} </button>
       </div>
       <div>
 
 
-        
-        <button onClick={() => createData()}>Visualizar envio</button>
+
+        <button onClick={() => createData()} className='buttonEnviar'>Visualizar envio</button>
 
         {shown && ReactDOM.createPortal(modalBody(), document.body)}
-        <code class='hide'>
+        <code className='hide'>
           {sendData = JSON.stringify({
             //selectedFlatRows: selectedFlatRows.map((row) => row.original),
             atividades: selectedFlatRows.map((row) => row.original),
@@ -446,47 +441,49 @@ export const Roterizador = () => {
         </code>
 
         <Modal isOpen={modalIsOpen} shouldCloseOnOverlayClick={false} onRequestClose={() => setModalIsOpen(false)}>
-        <div className={classes.root}>
-      <Collapse in={open && success}>
-       
-      <Alert
-        action={
-          <Button onClick={() => fecharModalAlert()} color="inherit" size="small">
-            FECHAR
+          <div className={classes.root}>
+            <Collapse in={open && success}>
+
+              <Alert
+                action={
+                  <Button onClick={() => fecharModalAlert()} color="inherit" size="small">
+                    <label className='texto'>FECHAR</label>
           </Button>
-        }
-      >
-      <AlertTitle>Integrado com sucesso!</AlertTitle>
-        Response: {responseS}
-      </Alert>
-      </Collapse>
+                }
+              >
+                <AlertTitle >Integrado com sucesso!</AlertTitle>
+                  <p>Response: {responseS}</p>
+              </Alert>
+            </Collapse>
 
-     
-      <Collapse in={open && !success}>
-       
-       <Alert
-         action={
-           <Button onClick={() => fecharModal()} color="inherit" size="small">
-             Fechar
+
+            <Collapse in={open && !success}>
+
+              <Alert
+                action={
+                  <Button onClick={() => fecharModal()} color="inherit" size="small">
+                    <label className='texto'>FECHAR</label>
            </Button>
-         }
-         severity="error"
-       >
-       <AlertTitle>Erro ao integrar!</AlertTitle>
-        Erro: {responseS}
+                }
+                severity="error"
+              >
+                <AlertTitle>Erro ao integrar!</AlertTitle>
+                <label >Erro: {responseS}</label>
 
-       </Alert>
-       </Collapse>
-       <LinearProgress color="secondary" hidden={!loadBar}/>
-    </div>
-          <button onClick={() => fecharModal()} hidden={!shown}>Fechar
-    </button>
+              </Alert>
+            </Collapse>
+            <LinearProgress color="secondary" hidden={!loadBar} />
+          </div>
+          <div id='divButton'>
+            <button onClick={() => fecharModal()} hidden={!shown} className='buttonFechar'>Fechar
+            </button>
+          </div>
 
 
           <BasicTable dados={sendData} />
-          <button onClick={() => {postRequest(sendData); setShown(false); setLoadBar(true)}
-          } disabled={!btnVisivel}> Enviar para Senior </button>
-          <button onClick={async () => pdfGenerate()}>
+          <button onClick={() => { postRequest(sendData); setShown(false); setLoadBar(true) }
+          } disabled={!btnVisivel} className='buttonEnviarModal'> Enviar para Senior </button>
+          <button onClick={async () => pdfGenerate()} className='buttonGeral'>
             Gerar pdf
 </button>
 
