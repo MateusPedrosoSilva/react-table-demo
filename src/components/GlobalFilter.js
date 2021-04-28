@@ -9,8 +9,8 @@ export const GlobalFilter = ({ filter, setFilter }) => {
 
   return (
     <span>
-      Search: {' '}
-      <input value={value || ''} onChange={(e) => {
+      Pesquisar: {' '}
+      <input placeholder='Rota, número de pedido...' value={value || ''} onChange={(e) => {
         setValue(e.target.value);
         onChange(e.target.value);
       }} />
