@@ -202,7 +202,7 @@ export const Roterizador = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const modalBody = () => (
     // Build the modal body
-    <div>
+    <div className='hide'>
       <p>Teste de pagina de resumo</p>
       <pre>
         <code>
