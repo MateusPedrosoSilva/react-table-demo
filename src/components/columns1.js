@@ -7,10 +7,6 @@ export const COLUMNS1 = [
     accessor: 'PLACA',
   },
   {
-    Header: 'Segunda placa',
-    accessor: 'SEGUNDA_PLACA',
-  },
-  {
     Header: 'Motorista CPF',
     accessor: 'MOTORISTA_CPF',
   },
@@ -58,14 +54,7 @@ export const COLUMNS1 = [
     Header: 'Documento',
     accessor: 'DOCUMENTO',
   },
-  {
-    Header: 'Tipo documento',
-    accessor: 'TIPO_DOCUMENTO',
-  },
-  {
-    Header: 'Chave de acesso',
-    accessor: 'CHAVE_ACESSO',
-  },
+  
   {
     Header: 'CEP',
     accessor: 'CODIGO_POSTAL',
@@ -91,22 +80,6 @@ export const COLUMNS1 = [
     accessor: 'MUNICIPIO',
   },
   {
-    Header: 'Estado',
-    accessor: 'ESTADO',
-  },
-  {
-    Header: 'País',
-    accessor: 'PAIS',
-  },
-  {
-    Header: 'Latitude',
-    accessor: 'LATITUDE',
-  },
-  {
-    Header: 'Longitude',
-    accessor: 'LONGITUDE',
-  },
-  {
     Header: 'Peso',
     accessor: 'PESO',
   },
@@ -115,41 +88,13 @@ export const COLUMNS1 = [
     accessor: 'QUANTIDADE',
   },
   {
-    Header: 'Volume',
-    accessor: 'VOLUME',
-  },
-  {
     Header: 'Valor mercadoria',
     accessor: 'VALOR_MERCADORIA',
   },
   {
     Header: 'Prazo de entrega',
     accessor: 'PRAZO_ENTREGA',
-  },
-  {
-    Header: 'Data agendamento',
-    accessor: 'DATA_AGENDAMENTO',
-  },
-  {
-    Header: 'Tempo de atendimento',
-    accessor: 'TEMPO_ATENDIMENTO',
-  },
-  {
-    Header: 'Horário início da janala',
-    accessor: 'HORARIO_INICIO_JANELA',
-  },
-  {
-    Header: 'Cód. tipo carga',
-    accessor: 'COD_TIPO_CARGA',
-  },
-  {
-    Header: 'Cód. operação',
-    accessor: 'COD_OPERACAO',
-  },
-  {
-    Header: 'Observações',
-    accessor: 'OBSERVACOES',
-  },
+  }
 ];
 
 export const GROUPED_COLUMNS = [
