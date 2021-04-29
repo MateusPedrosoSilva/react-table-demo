@@ -197,7 +197,7 @@ export const Roterizador = () => {
             // ),
             Cell: ({ row }) => (
               <Checkbox {...row.getToggleRowSelectedProps()} />
-            )
+            ),
           },
           ...columns,
         ];
@@ -229,9 +229,6 @@ export const Roterizador = () => {
       {/* <button onClick={() => setShown(false)}>Fechar</button> */}
     </div>
   );
-
-
-
 
   //GAMBIARRAS
   const createData = () => {
@@ -313,7 +310,7 @@ export const Roterizador = () => {
       .then(function (response) {
         setLoadBar(false);
 
-        if(response.data.message.ticket === undefined){
+        if (response.data.message.ticket === undefined) {
           setOpen(false);
           setSuccess(false);
           setResponseS("Ticket: " + response.data.message.ticket + " / Status: ERRO! ");
@@ -333,7 +330,7 @@ export const Roterizador = () => {
           console.log(error.response.status);
           console.log(error.response.headers);
           setResponseS(error.response.data.message);
-        } 
+        }
       })
       ;
   };
@@ -344,6 +341,7 @@ export const Roterizador = () => {
         {MenuExampleInputs()}
       </header>
 
+      <div id='scrollTable'>
       {
         loadingData ? (<LinearProgress color="secondary" />) : (<table {...getTableProps()}>
           <thead>
@@ -392,6 +390,8 @@ export const Roterizador = () => {
           </tfoot>
         </table>)
       }
+      </div>
+
       <div>
         <span>
           Página{' '}
@@ -448,11 +448,11 @@ export const Roterizador = () => {
                 action={
                   <Button onClick={() => fecharModalAlert()} color="inherit" size="small">
                     <label className='texto'>FECHAR</label>
-          </Button>
+                  </Button>
                 }
               >
                 <AlertTitle >Integrado com sucesso!</AlertTitle>
-                  <p>Response: {responseS}</p>
+                <p>Response: {responseS}</p>
               </Alert>
             </Collapse>
 
@@ -463,7 +463,7 @@ export const Roterizador = () => {
                 action={
                   <Button onClick={() => fecharModal()} color="inherit" size="small">
                     <label className='texto'>FECHAR</label>
-           </Button>
+                  </Button>
                 }
                 severity="error"
               >
@@ -473,6 +473,7 @@ export const Roterizador = () => {
               </Alert>
             </Collapse>
             <LinearProgress color="secondary" hidden={!loadBar} />
+            <br />
           </div>
           <div id='divButton'>
             <button onClick={() => fecharModal()} hidden={!shown} className='buttonFechar'>Fechar

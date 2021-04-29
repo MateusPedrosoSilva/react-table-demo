@@ -73,7 +73,7 @@ padding-right: 10px;
     margin-left: 5px;
     margin-top: 10px;
     height: 30px;
-    width: 80px;
+    width: 90px;
     font-size: 15px;
   }
   .buttonGeral:hover {
@@ -126,4 +126,8 @@ padding-right: 10px;
 /* Texto */
 .texto {
   font-size: 15px;
+}
+
+#scrollTable{
+  overflow-x: scroll;
 }
