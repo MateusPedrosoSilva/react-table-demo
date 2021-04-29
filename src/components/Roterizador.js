@@ -11,6 +11,8 @@ import 'jspdf-autotable';
 import './header/header.css';
 import 'semantic-ui-css/semantic.min.css';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import IconButton from '@material-ui/core/IconButton';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
 import Modal from 'react-modal';
 
@@ -475,13 +477,17 @@ export const Roterizador = () => {
             <LinearProgress color="secondary" hidden={!loadBar} />
             <br />
           </div>
-          <div id='divButton'>
-            <button onClick={() => fecharModal()} hidden={!shown} className='buttonFechar'>Fechar
-            </button>
+          
+          <div id='divButton' hidden={!shown}>
+            <IconButton color="secondary" aria-label="Fechar" onClick={() => fecharModal()}  >
+              <HighlightOffIcon fontSize="large" />
+            </IconButton>
           </div>
 
-
+          <div id='tabelaModal'>
           <BasicTable dados={sendData} />
+          </div>
+
           <button onClick={() => { postRequest(sendData); setShown(false); setLoadBar(true) }
           } disabled={!btnVisivel} className='buttonEnviarModal'> Enviar para Senior </button>
           <button onClick={async () => pdfGenerate()} className='buttonGeral'>
