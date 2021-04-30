@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { useTable, useRowSelect, usePagination, useSortBy, useGlobalFilter } from "react-table";
+import { useTable, useRowSelect, usePagination, useSortBy, useGlobalFilter, useFilters } from "react-table";
 import axios from 'axios';
 import { COLUMNS } from './columns';
 import './table.css';
@@ -13,6 +13,7 @@ import 'semantic-ui-css/semantic.min.css';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import IconButton from '@material-ui/core/IconButton';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+
 
 import Modal from 'react-modal';
 
@@ -182,6 +183,7 @@ export const Roterizador = () => {
       ]
     }
   },
+    useFilters,
     useGlobalFilter,
     useSortBy,
     usePagination,
@@ -299,12 +301,10 @@ export const Roterizador = () => {
     }
   }
 
-
-
   //localmente
   async function postRequest(data) {
     setBtnVisivel('');
-    await axios.post('http://10.15.2.48:7777/enviarPedidos', JSON.parse(data), {
+    await axios.post('http://rota.lidernet.com.br:7777/enviarPedidos', JSON.parse(data), {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -344,54 +344,55 @@ export const Roterizador = () => {
       </header>
 
       <div id='scrollTable'>
-      {
-        loadingData ? (<LinearProgress color="secondary" />) : (<table {...getTableProps()}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}> {column.render('Header')} </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {
+        {
+          loadingData ? (<LinearProgress color="secondary" />) : (<table {...getTableProps()}>
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <th {...column.getHeaderProps()}>
+                       {column.render('Header')} 
+                    <div>{column.canFilter ? column.render('Filter') : null}</div>
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {
+                // firstPageRows.map((row) => {  
+                // rows.map((row) => {
+                page.map((row) => {
+                  prepareRow(row);
 
-
-              // firstPageRows.map((row) => {  
-              // rows.map((row) => {
-              page.map((row) => {
-                prepareRow(row);
-
-                return (
-                  <tr {...row.getRowProps()}>
-                    {row.cells.map((cell) => {
-                      return <td {...cell.getCellProps()}> {cell.render('Cell')} </td>
-                    })
-                    }
+                  return (
+                    <tr {...row.getRowProps()}>
+                      {row.cells.map((cell) => {
+                        return <td {...cell.getCellProps()}> {cell.render('Cell')} </td>
+                      })
+                      }
+                    </tr>
+                  )
+                })
+              }
+            </tbody>
+            <tfoot>
+              {footerGroups.map(
+                (footerGroup) => (
+                  <tr {...footerGroup.getFooterGroupProps()}>
+                    {footerGroup.headers.map(
+                      (column) => (
+                        <td {...column.getFooterProps()}>
+                          {column.render('Footer')}
+                        </td>
+                      )
+                    )}
                   </tr>
                 )
-              })
-            }
-          </tbody>
-          <tfoot>
-            {footerGroups.map(
-              (footerGroup) => (
-                <tr {...footerGroup.getFooterGroupProps()}>
-                  {footerGroup.headers.map(
-                    (column) => (
-                      <td {...column.getFooterProps()}>
-                        {column.render('Footer')}
-                      </td>
-                    )
-                  )}
-                </tr>
-              )
-            )}
-          </tfoot>
-        </table>)
-      }
+              )}
+            </tfoot>
+          </table>)
+        }
       </div>
 
       <div>
@@ -477,7 +478,7 @@ export const Roterizador = () => {
             <LinearProgress color="secondary" hidden={!loadBar} />
             <br />
           </div>
-          
+
           <div id='divButton' hidden={!shown}>
             <IconButton color="secondary" aria-label="Fechar" onClick={() => fecharModal()}  >
               <HighlightOffIcon fontSize="large" />
@@ -485,19 +486,19 @@ export const Roterizador = () => {
           </div>
 
           <div id='tabelaModal'>
-          <BasicTable dados={sendData} />
+            <BasicTable dados={sendData} />
           </div>
 
-          <button onClick={() => { postRequest(sendData); setShown(false); setLoadBar(true) }
-          } disabled={!btnVisivel} className='buttonEnviarModal'> Enviar para Senior </button>
+          <button onClick={() => { postRequest(sendData); setShown(false); setLoadBar(true) }}
+            disabled={!btnVisivel} className='buttonEnviarModal'>
+            Enviar para Senior
+          </button>
+
           <button onClick={async () => pdfGenerate()} className='buttonGeral'>
             Gerar pdf
-</button>
-
+          </button>
         </Modal>
-
       </div>
-
     </>
   )
 }
