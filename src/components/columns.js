@@ -33,12 +33,6 @@ export const COLUMNS = [
     disableFilters: true,
   },
   {
-    Header: 'Data previsão de atendimento',
-    accessor: 'DATA_PREVISAO_ATENDIMENTO',
-    disableFilters: true,
-  },
-  
-  {
     Header: 'Pedido',
     accessor: 'SEQUENCIA',
     disableFilters: true,
@@ -116,11 +110,6 @@ export const COLUMNS = [
   {
     Header: 'Município',
     accessor: 'MUNICIPIO',
-    disableFilters: true,
-  },
-  {
-    Header: 'Estado',
-    accessor: 'ESTADO',
     disableFilters: true,
   },
   {

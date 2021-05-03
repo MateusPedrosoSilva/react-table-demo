@@ -5,6 +5,10 @@ p {
     padding-top: 15px;
 }
 
+td{
+  text-align: center;
+}
+
 label {
 font-size: 20px;
 padding-right: 10px;

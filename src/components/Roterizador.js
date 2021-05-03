@@ -9,15 +9,17 @@ import moment from 'moment';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import './header/header.css';
-import 'semantic-ui-css/semantic.min.css';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import IconButton from '@material-ui/core/IconButton';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 
+//Semantic-ui
+import 'semantic-ui-css/semantic.min.css';
+import { Menu } from 'semantic-ui-react';
+
+//Material-ui
+import {LinearProgress, IconButton, makeStyles, Collapse, Button} from '@material-ui/core';
+import HighlightOffIcon from '@material-ui/icons/HighlightOff';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 import Modal from 'react-modal';
-
-import { Menu } from 'semantic-ui-react';
 
 import { GlobalFilter } from './GlobalFilter'
 
@@ -26,12 +28,6 @@ import imagem from '../images/cabecalho.jpg';
 import DatePicker from 'react-date-picker';
 
 import { BasicTable } from './BasicTable';
-
-import { makeStyles } from '@material-ui/core/styles';
-import { Alert, AlertTitle } from '@material-ui/lab';
-
-import Collapse from '@material-ui/core/Collapse';
-import Button from '@material-ui/core/Button';
 
 export const Roterizador = () => {
   //TODO: Manage the date, initial date
