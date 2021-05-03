@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom';
 import { useTable, useRowSelect, usePagination, useSortBy, useGlobalFilter, useFilters } from "react-table";
 import axios from 'axios';
 import { COLUMNS } from './columns';
-import './table.css';
-import { Checkbox } from './Checkbox';
+import { Checkbox } from './Checkbox';  
 import moment from 'moment';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+
+//CSS
 import './header/header.css';
+import './table.css';
 
 //Semantic-ui
 import 'semantic-ui-css/semantic.min.css';
@@ -25,6 +27,7 @@ import { GlobalFilter } from './GlobalFilter'
 
 import imagem from '../images/cabecalho.jpg';
 
+//Calendário
 import DatePicker from 'react-date-picker';
 
 import { BasicTable } from './BasicTable';
@@ -32,8 +35,11 @@ import { BasicTable } from './BasicTable';
 export const Roterizador = () => {
   //TODO: Manage the date, initial date
 
-  const [data, setData] = useState([]);
+  //LoadingBar
   const [loadingData, setLoadingData] = useState(true);
+  const [loadingCelulas, setLoadingCelula] = useState(false);
+  
+  const [data, setData] = useState([]);
   const [shown, setShown] = useState(false);
   const [dataInicial, setDataInicial] = useState(new Date());
   const [dataFinal, setDataFinal] = useState(new Date());
@@ -58,9 +64,8 @@ export const Roterizador = () => {
 
   const columns = useMemo(() => COLUMNS, []);
 
-
-
   async function getData(datai1, dataf1) {
+    setLoadingCelula(true);
     if (datai1 != null) {
       var dataFormatadaInicial = moment(datai1).format('YY-MM-DD');
       var partei = dataFormatadaInicial.split('-');
@@ -87,6 +92,7 @@ export const Roterizador = () => {
       .then((res) => {
         setData(res.data.message);
         setLoadingData(false);
+        setLoadingCelula(false);
         // console.log(res.data.message);
       });
   };
@@ -340,6 +346,7 @@ export const Roterizador = () => {
       </header>
 
       <div id='scrollTable'>
+        <LinearProgress color="secondary" hidden={!loadingCelulas}/>
         {
           loadingData ? (<LinearProgress color="secondary" />) : (<table {...getTableProps()}>
             <thead>
@@ -360,12 +367,12 @@ export const Roterizador = () => {
                 // rows.map((row) => {
                 page.map((row) => {
                   prepareRow(row);
-
                   return (
                     <tr {...row.getRowProps()}>
-                      {row.cells.map((cell) => {
+                      {
+                        row.cells.map((cell) => {
                         return <td {...cell.getCellProps()}> {cell.render('Cell')} </td>
-                      })
+                        })
                       }
                     </tr>
                   )
@@ -387,7 +394,8 @@ export const Roterizador = () => {
                 )
               )}
             </tfoot>
-          </table>)
+          </table>
+          )
         }
       </div>
 
