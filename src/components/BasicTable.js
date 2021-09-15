@@ -6,15 +6,13 @@ import { COLUMNS1 } from './columns1';
 import './table.css';
 
 export const BasicTable = (props) => {
-
   const columns = useMemo(() => COLUMNS1, []);
   // const columns = useMemo(() => GROUPED_COLUMNS, []);
 
-  var tbl =  JSON.parse(props.dados);
-console.log(typeof tbl);
+  var tbl = JSON.parse(props.dados);
+  console.log(typeof tbl);
 
   const data = tbl.atividades;
-
 
   const {
     getTableProps,

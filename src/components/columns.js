@@ -35,7 +35,7 @@ export const COLUMNS = [
   {
     Header: 'Pedido',
     accessor: 'SEQUENCIA',
-    disableFilters: true,
+    Filter: ColumnFilter,
   },
   {
     Header: 'Retorna origem',
@@ -70,7 +70,7 @@ export const COLUMNS = [
   {
     Header: 'Documento',
     accessor: 'DOCUMENTO',
-    disableFilters: true,
+    Filter: ColumnFilter,
   },
   {
     Header: 'Tipo documento',

@@ -1,5 +1,7 @@
 import './App.css';
-import { Roterizador } from './components/Roterizador';
+// import { Roterizador } from './components/Roterizador';
+// import { Reenvio } from './components/reenvioRota';
+import Routes from "./components/Routes";
 
 
 import Modal from 'react-modal';
@@ -16,10 +18,11 @@ function App() {
     // <div className="App">
     //   <RowSelection />
     // </div>
-    <div>
-
-      <Roterizador />
-    </div>
+    // <div>
+    //   {/* <Roterizador /> */}
+    //   <Reenvio/>
+    // </div>
+    <Routes/>
   );
 }
 

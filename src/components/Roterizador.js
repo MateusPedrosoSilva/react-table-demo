@@ -3,10 +3,12 @@ import ReactDOM from 'react-dom';
 import { useTable, useRowSelect, usePagination, useSortBy, useGlobalFilter, useFilters } from "react-table";
 import axios from 'axios';
 import { COLUMNS } from './columns';
-import { Checkbox } from './Checkbox';  
+import { Checkbox } from './Checkbox';
 import moment from 'moment';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import { Link } from 'react-router-dom';
+
 
 //CSS
 import './header/header.css';
@@ -17,13 +19,13 @@ import 'semantic-ui-css/semantic.min.css';
 import { Menu } from 'semantic-ui-react';
 
 //Material-ui
-import {LinearProgress, IconButton, makeStyles, Collapse, Button} from '@material-ui/core';
+import { LinearProgress, IconButton, makeStyles, Collapse, Button } from '@material-ui/core';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
 import Modal from 'react-modal';
 
-import { GlobalFilter } from './GlobalFilter'
+// import { GlobalFilter } from './GlobalFilter';
 
 import imagem from '../images/cabecalho.jpg';
 
@@ -31,14 +33,15 @@ import imagem from '../images/cabecalho.jpg';
 import DatePicker from 'react-date-picker';
 
 import { BasicTable } from './BasicTable';
+// import { set } from 'date-fns';
 
-export const Roterizador = () => {
+const Roterizador = () => {
   //TODO: Manage the date, initial date
 
   //LoadingBar
   const [loadingData, setLoadingData] = useState(true);
   const [loadingCelulas, setLoadingCelula] = useState(false);
-  
+
   const [data, setData] = useState([]);
   const [shown, setShown] = useState(false);
   const [dataInicial, setDataInicial] = useState(new Date());
@@ -64,6 +67,7 @@ export const Roterizador = () => {
 
   const columns = useMemo(() => COLUMNS, []);
 
+  // Função de Pegar os pedidos 
   async function getData(datai1, dataf1) {
     setLoadingCelula(true);
     if (datai1 != null) {
@@ -87,13 +91,15 @@ export const Roterizador = () => {
       dataf1 = dataFormatada2;
     }
 
+
+
     await axios
       .get(`http://10.15.2.48:7777/listarPedidos?data_inicial=${datai1}&data_final=${dataf1}`)
       .then((res) => {
         setData(res.data.message);
         setLoadingData(false);
         setLoadingCelula(false);
-        // console.log(res.data.message);
+        console.log(res.status);
       });
   };
 
@@ -113,8 +119,18 @@ export const Roterizador = () => {
 
   const MenuExampleInputs = () => (
     <Menu>
-      <Menu.Item>
-        <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+      <Menu.Item position='left'>
+        <Link to='/' disabled='true'>
+          <button className='botesRotas' disabled="true">
+            Inicial
+          </button>
+        </Link>
+
+        <Link to='/reenvio'>
+          <button className='botesRotas'>
+            Reenviar Pedido
+          </button>
+        </Link>
       </Menu.Item>
 
       <Menu.Item position='right' >
@@ -134,7 +150,7 @@ export const Roterizador = () => {
 
         <button onClick={() => getData(dataInicial, dataFinal)} className='button'>
           Atualizar
-      </button>
+        </button>
       </Menu.Item>
     </Menu>
   )
@@ -155,7 +171,7 @@ export const Roterizador = () => {
     pageCount,
     setPageSize,
     state,
-    setGlobalFilter,
+    // setGlobalFilter,
     prepareRow,
     selectedFlatRows,
   } = useTable({
@@ -212,9 +228,10 @@ export const Roterizador = () => {
   );
 
   // const firstPageRows = rows.slice(0, 200);
-  const { pageIndex, pageSize, globalFilter } = state;
+  const { pageIndex, pageSize } = state;
 
   const [modalIsOpen, setModalIsOpen] = useState(false)
+
   const modalBody = () => (
     // Build the modal body
     <div className='hide'>
@@ -263,7 +280,7 @@ export const Roterizador = () => {
   }
 
   const pdfGenerate = () => {
-    var doc = new jsPDF('landscape', 'px', 'a4', 'false');
+    var doc = new jsPDF('portrait', 'px', 'a4', 'false');
 
 
     var bodyTable = [];
@@ -281,21 +298,22 @@ export const Roterizador = () => {
       startY: 115
     });
 
-
     var image = new Image();
     // image.src = "https://js.cx/clipart/train.gif";
     image.src = imagem;
 
-
     image.onload = function () {
-      doc.addImage(image, 'PNG', 70, 10, 500, 95);
+      doc.setPage(1);
+
+      doc.addImage(image, 'PNG', 10, 10, 415, 95);
+
       console.log('carregou');
 
       doc.autoPrint();
 
       window.open(doc.output('bloburl'), '_blank', "toolbar=no,status=no,menubar=no,scrollbars=no,resizable=no,modal=yes,top=200,left=350,width=800,height=600");
 
-      doc.save('resultado.pdf');
+      // doc.save('resultado.pdf');
     }
 
     image.onerror = function (e) {
@@ -346,21 +364,31 @@ export const Roterizador = () => {
       </header>
 
       <div id='scrollTable'>
-        <LinearProgress color="secondary" hidden={!loadingCelulas}/>
+        <LinearProgress color="secondary" hidden={!loadingCelulas} />
         {
           loadingData ? (<LinearProgress color="secondary" />) : (<table {...getTableProps()}>
+            {/* Head da Tabela */}
             <thead>
               {headerGroups.map((headerGroup) => (
                 <tr {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map((column) => (
-                    <th {...column.getHeaderProps()}>
-                       {column.render('Header')} 
-                    <div>{column.canFilter ? column.render('Filter') : null}</div>
+                    <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                      {column.render('Header')}
+                      <span>
+                        {column.isSorted
+                          ? column.isSortedDesc
+                            ? ' ▼'
+                            : ' ▲'
+                          : ''}
+                      </span>
+                      <div>{column.canFilter ? column.render('Filter') : null}</div>
                     </th>
                   ))}
                 </tr>
               ))}
             </thead>
+
+            {/* Body da tabela */}
             <tbody {...getTableBodyProps()}>
               {
                 // firstPageRows.map((row) => {  
@@ -371,7 +399,7 @@ export const Roterizador = () => {
                     <tr {...row.getRowProps()}>
                       {
                         row.cells.map((cell) => {
-                        return <td {...cell.getCellProps()}> {cell.render('Cell')} </td>
+                          return <td {...cell.getCellProps()}> {cell.render('Cell')} </td>
                         })
                       }
                     </tr>
@@ -379,6 +407,8 @@ export const Roterizador = () => {
                 })
               }
             </tbody>
+
+            {/* Footer da Tabela */}
             <tfoot>
               {footerGroups.map(
                 (footerGroup) => (
@@ -399,6 +429,7 @@ export const Roterizador = () => {
         }
       </div>
 
+      {/* Paginação */}
       <div>
         <span>
           Página{' '}
@@ -424,16 +455,17 @@ export const Roterizador = () => {
           }
         </select>
       </div>
+
+      {/* Botões */}
       <div>
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage} className='buttonSeta'> {'<<'} </button>
         <button onClick={() => previousPage()} disabled={!canPreviousPage} className='buttonGeral'> Anterior </button>
         <button onClick={() => nextPage()} disabled={!canNextPage} className='buttonGeral'> Próxima </button>
         <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage} className='buttonSeta'> {'>>'} </button>
       </div>
+
+      {/* Modal Option */}
       <div>
-
-
-
         <button onClick={() => createData()} className='buttonEnviar'>Visualizar envio</button>
 
         {shown && ReactDOM.createPortal(modalBody(), document.body)}
@@ -506,3 +538,5 @@ export const Roterizador = () => {
     </>
   )
 }
+
+export default Roterizador;
